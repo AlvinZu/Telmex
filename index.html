@@ -72,11 +72,21 @@
             font-size: 1.1rem;
         }
 
-        /* Menú de Materias y Bloques */
+        /* Menús y Cuadrículas */
         .grid-layout {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
+        }
+
+        .main-menu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .full-width-btn {
+            grid-column: 1 / -1;
         }
 
         .card-btn {
@@ -178,7 +188,6 @@
             justify-content: space-between;
             margin-top: 25px;
             gap: 10px;
-            flex-wrap: wrap;
         }
 
         .btn-action {
@@ -191,7 +200,7 @@
             cursor: pointer;
             transition: background 0.3s;
             flex: 1;
-            min-width: 200px;
+            text-align: center;
         }
 
         .btn-action:hover {
@@ -239,7 +248,7 @@
             margin-bottom: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            transition: opacity 0.3s ease; /* Transición suave para el buscador */
+            transition: opacity 0.3s ease;
         }
 
         .study-question {
@@ -269,12 +278,11 @@
         }
 
         #study-content-list {
-            max-height: 55vh; /* Ajustado ligeramente para dar espacio al buscador */
+            max-height: 55vh; 
             overflow-y: auto;
             padding-right: 10px;
         }
         
-        /* NUEVO: Estilos de la barra de búsqueda */
         .search-input {
             width: 100%;
             padding: 12px 15px;
@@ -294,6 +302,49 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* ========================================================= */
+        /* MAGIA DE RESPONSIVIDAD PARA CELULARES (DISEÑO ADAPTATIVO) */
+        /* ========================================================= */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px; /* Reducimos drásticamente los márgenes externos */
+                align-items: flex-start; /* Para que en pantallas cortas no se corte por arriba */
+            }
+            .container {
+                padding: 15px; /* Reducimos el relleno interno de la app */
+                border-radius: 8px; /* Bordes ligeramente menos curvos para aprovechar espacio */
+            }
+            .main-menu-grid {
+                grid-template-columns: 1fr; /* Colocamos todo en 1 sola columna vertical */
+            }
+            .card-btn {
+                padding: 15px; /* Botones más compactos */
+            }
+            .question-header {
+                flex-direction: column; /* Apila el título y el contador de preguntas */
+                align-items: flex-start;
+                gap: 5px;
+            }
+            .question-text {
+                font-size: 1.2rem; /* Letra un poco más pequeña para preguntas largas */
+            }
+            .controls-group {
+                flex-direction: column; /* Botones de navegación (Atrás/Siguiente) uno sobre otro */
+                gap: 15px;
+            }
+            .btn-action {
+                width: 100%; /* Botones de esquina a esquina */
+            }
+            .score-circle {
+                width: 120px;
+                height: 120px;
+                font-size: 2.5rem; /* Círculo de puntuación más pequeño */
+            }
+            header h1 {
+                font-size: 1.5rem; /* Título principal más ajustado */
+            }
+        }
     </style>
 </head>
 <body>
@@ -304,7 +355,7 @@
             <p class="subtitle" id="header-subtitle">¿Qué deseas hacer hoy?</p>
         </header>
 
-        <div id="mode-section" class="grid-layout" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+        <div id="mode-section" class="main-menu-grid">
             <div class="card-btn" onclick="seleccionarModo('estudio')" style="background-color: #e3f2fd; border-color: #90caf9;">
                 <span style="font-size: 2rem; margin-bottom: 10px;">📖</span>
                 Estudiar Temario
@@ -316,7 +367,7 @@
                 <span style="font-size: 0.85rem; font-weight: normal; color: #555; margin-top: 10px;">Practica materia por materia</span>
             </div>
             
-            <div class="card-btn" onclick="iniciarSimulacroGlobal()" style="background-color: #ffebee; border-color: #ef9a9a; grid-column: 1 / -1;">
+            <div class="card-btn full-width-btn" onclick="iniciarSimulacroGlobal()" style="background-color: #ffebee; border-color: #ef9a9a;">
                 <span style="font-size: 2.5rem; margin-bottom: 10px;">🏆</span>
                 Simulacro Real (Examen Final)
                 <span style="font-size: 1rem; font-weight: normal; color: #555; margin-top: 10px;">40 preguntas al azar de todas las materias. El reto final.</span>
@@ -542,7 +593,7 @@
                     { pregunta: "¿Cuál es la ruta correcta para crear una nueva carpeta en el escritorio mediante el menú contextual (clic derecho)?", opciones: ["Personalizar / Carpeta", "Nuevo / Carpeta", "Ver / Nueva Carpeta", "Actualizar / Carpeta"], respuestaCorrecta: 1, explicacion: "Clic derecho -> Nuevo -> Carpeta." },
                     { pregunta: "En Microsoft Word, si las reglas no se muestran por defecto para establecer tabulaciones y márgenes, ¿en qué pestaña se pueden activar?", opciones: ["Inicio", "Diseño de página", "Vista", "Insertar"], respuestaCorrecta: 2, explicacion: "Controlan lo que estás 'viendo' en pantalla." },
                     { pregunta: "En Word, la barra de estado se encuentra en la parte inferior. ¿Qué información nos proporciona principalmente?", opciones: ["El nombre del archivo y botones de minimizar/cerrar", "Las pestañas de herramientas como Inicio e Insertar", "La página en que nos encontramos, el idioma, y el zoom", "Las opciones de Guardar, Deshacer y Rehacer"], respuestaCorrecta: 2, explicacion: "Muestra métricas básicas de lectura." },
-                    { pregunta: "En Word, ¿qué hace la combination de teclado MAYUS + FIN (Shift + Fin)?", opciones: ["Selecciona un carácter a la derecha", "Selecciona hasta el principio de la línea", "Selecciona hasta el final de la línea", "Selecciona todo el documento"], respuestaCorrecta: 2, explicacion: "Selecciona texto hacia el extremo derecho." },
+                    { pregunta: "En Word, ¿qué hace la combinación de teclado MAYUS + FIN (Shift + Fin)?", opciones: ["Selecciona un carácter a la derecha", "Selecciona hasta el principio de la línea", "Selecciona hasta el final de la línea", "Selecciona todo el documento"], respuestaCorrecta: 2, explicacion: "Selecciona texto hacia el extremo derecho." },
                     { pregunta: "En Word, ¿cuál es el atajo de teclado para aplicar el formato Cursiva al texto seleccionado?", opciones: ["Ctrl + N", "Ctrl + K", "Ctrl + S", "Ctrl + C"], respuestaCorrecta: 1, explicacion: "K de Kursiva (en teclados españoles)." },
                     { pregunta: "Si un documento en Word es muy extenso y necesitas encontrar una palabra específica, ¿en qué grupo de la pestaña Inicio encuentras la opción Buscar (Ctrl + B)?", opciones: ["Portapapeles", "Párrafo", "Estilos", "Edición"], respuestaCorrecta: 3, explicacion: "Se ubica al extremo derecho en 'Edición'." },
                     { pregunta: "¿Cuántos elementos como máximo soporta el panel del portapapeles en Microsoft Word?", opciones: ["1 elemento", "10 elementos", "24 elementos", "100 elementos"], respuestaCorrecta: 2, explicacion: "El portapapeles extendido de Office guarda hasta 24 cortes." },
@@ -721,7 +772,6 @@
             
             document.getElementById('study-subject-title').innerText = `${baseDeDatos[materiaActual].nombre} - ${bloqueActualTexto} (Modo Estudio)`;
             
-            // NUEVO: Limpiamos la barra de búsqueda al entrar a un nuevo bloque
             document.getElementById('study-search-bar').value = '';
             
             const studyContainer = document.getElementById('study-content-list');
@@ -742,7 +792,6 @@
             });
         }
 
-        // NUEVA FUNCIÓN: Filtrar tarjetas en el Modo Estudio
         function filtrarEstudio() {
             const barraBusqueda = document.getElementById('study-search-bar');
             const filtro = barraBusqueda.value.toLowerCase();
@@ -751,7 +800,6 @@
             tarjetas.forEach(tarjeta => {
                 const textoTarjeta = tarjeta.innerText.toLowerCase();
                 
-                // Si el texto de la tarjeta incluye lo que el usuario escribió, la mostramos, sino la ocultamos
                 if (textoTarjeta.includes(filtro)) {
                     tarjeta.style.display = 'block';
                 } else {
