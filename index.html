@@ -239,6 +239,24 @@
         #result-section {
             text-align: center;
         }
+      
+      /* Estilos para Configuración de Simulacro Personalizado */
+        .config-box {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .config-box h4 { margin-top: 0; margin-bottom: 15px; color: var(--primary-color); }
+        .checkbox-group label {
+            display: flex; align-items: center; margin-bottom: 12px; font-size: 1.1rem; cursor: pointer;
+        }
+        .checkbox-group input { transform: scale(1.5); margin-right: 15px; }
+        .slider-container { margin-top: 10px; }
+        .slider-container input[type="range"] { width: 100%; margin: 10px 0; }
+        .select-container select { width: 100%; padding: 12px; font-size: 1.1rem; border-radius: 6px; border: 2px solid #ddd; }
 
         /* Estilos de la Pantalla de Estudio */
         .study-card {
@@ -368,10 +386,53 @@
                 <span style="font-size: 0.85rem; font-weight: normal; color: #555; margin-top: 10px;">Practica materia por materia</span>
             </div>
             
-            <div class="card-btn full-width-btn" onclick="iniciarSimulacroGlobal()" style="background-color: #ffebee; border-color: #ef9a9a;">
+            <div class="card-btn " onclick="abrirConfiguracion()" style="background-color: #ffebee; border-color: #ef9a9a;">
                 <span style="font-size: 2.5rem; margin-bottom: 10px;">🏆</span>
                 Simulacro Real (Examen Final)
                 <span style="font-size: 1rem; font-weight: normal; color: #555; margin-top: 10px;">40 preguntas al azar de todas las materias. El reto final.</span>
+            </div>
+          
+          <div class="card-btn" onclick="iniciarRepasoErrores()" style="background-color: #f3e5f5; border-color: #ce93d8;">
+                <span style="font-size: 2.5rem; margin-bottom: 10px;">🧠</span>
+                Repasar Errores
+                <span style="font-size: 1rem; font-weight: normal; color: #555; margin-top: 10px;">Ponte a prueba solo con las que has fallado.</span>
+            </div>
+        </div>
+      
+      <div id="config-section" style="display: none;">
+            <h2 style="text-align: center; color: var(--primary-color);">⚙️ Configura tu Examen</h2>
+            
+            <div class="config-box">
+                <h4>📚 Materias a incluir</h4>
+                <div class="checkbox-group" id="config-materias">
+                    <label><input type="checkbox" value="electronica" checked> 🔋 Electrónica Básica</label>
+                    <label><input type="checkbox" value="algebra" checked> ✖️ Álgebra</label>
+                    <label><input type="checkbox" value="computo" checked> 💻 Cómputo</label>
+                    <label><input type="checkbox" value="electricidad" checked> ⚡ Electricidad</label>
+                </div>
+            </div>
+
+            <div class="config-box">
+                <h4>🔢 Número de preguntas: <span id="num-preguntas-valor" style="color: var(--primary-color); font-weight: bold; font-size: 1.4rem;">40</span></h4>
+                <div class="slider-container">
+                    <input type="range" id="config-num-preguntas" min="5" max="400" step="5" value="40" oninput="document.getElementById('num-preguntas-valor').innerText = this.value">
+                </div>
+            </div>
+
+            <div class="config-box">
+                <h4>⏱️ Tiempo por pregunta</h4>
+                <div class="select-container">
+                    <select id="config-tiempo">
+                        <option value="20">🔥 Rápido (20 segundos)</option>
+                        <option value="59" selected>⏱️ Normal (59 segundos)</option>
+                        <option value="0">☕ Sin límite (Modo relajado)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="controls-group">
+                <button class="btn-action btn-back" onclick="volverInicio()">⬅ Cancelar</button>
+                <button class="btn-action" onclick="iniciarSimulacroPersonalizado()">🚀 Iniciar Reto</button>
             </div>
         </div>
 
@@ -908,6 +969,59 @@
         let inicioGuardado = 0;
         let finGuardado = 0;
         let esSimulacroGlobal = false;
+        
+        // ==========================================
+        // LÓGICA DEL BANCO DE ERRORES
+        // ==========================================
+        let esModoErrores = false;
+        let bancoErrores = JSON.parse(localStorage.getItem('telmex_errores')) || [];
+
+        function agregarAErrores(preguntaFallada) {
+            // Evita que la pregunta se duplique si ya estaba guardada
+            const existe = bancoErrores.find(p => p.pregunta === preguntaFallada.pregunta);
+            if (!existe) {
+                bancoErrores.push(preguntaFallada);
+                localStorage.setItem('telmex_errores', JSON.stringify(bancoErrores));
+            }
+        }
+
+        function quitarDeErrores(textoPregunta) {
+            const longitudInicial = bancoErrores.length;
+            bancoErrores = bancoErrores.filter(p => p.pregunta !== textoPregunta);
+            // Solo guarda si realmente eliminó una pregunta que estaba en la lista
+            if (bancoErrores.length !== longitudInicial) {
+                localStorage.setItem('telmex_errores', JSON.stringify(bancoErrores));
+            }
+        }
+
+        function iniciarRepasoErrores() {
+            if (bancoErrores.length === 0) {
+                alert("¡Felicidades! No tienes errores guardados actualmente. Sigue practicando en los simulacros.");
+                return;
+            }
+
+            modoActual = 'simulador';
+            esSimulacroGlobal = false;
+            esModoErrores = true;
+            
+            // Copiamos el banco de errores y mezclamos el orden
+            preguntasActuales = [...bancoErrores];
+            preguntasActuales.sort(() => Math.random() - 0.5);
+
+            tiempoElegido = 59; // Tiempo estándar para el repaso
+            indicePregunta = 0;
+            puntaje = 0;
+
+            modeSection.style.display = 'none';
+            menuSection.style.display = 'none';
+            quizSection.style.display = 'block';
+            
+            document.getElementById('subject-title').innerText = `🧠 Repaso de Errores (${preguntasActuales.length} Preguntas)`;
+            document.getElementById('feedback-box').classList.remove('show');
+
+            cargarPregunta();
+        }
+        // ==========================================
 
         const modeSection = document.getElementById('mode-section');
         const menuSection = document.getElementById('menu-section');
@@ -922,11 +1036,23 @@
         // LÓGICA DEL TEMPORIZADOR
         // ==========================================
         let tiempoRestante = 59;
+        let tiempoElegido = 59; // Agregamos esta memoria
         let temporizadorInterval = null;
 
         function iniciarTemporizador() {
-            detenerTemporizador(); // Limpiar por si acaso había uno corriendo
-            tiempoRestante = 59;
+            detenerTemporizador(); 
+            
+            // Si elegiste la opción 0 (Sin límite), el reloj no arranca
+            if (tiempoElegido === 0) {
+                const timerDisplay = document.getElementById('timer-display');
+                if (timerDisplay) {
+                    timerDisplay.innerText = "☕ ∞";
+                    timerDisplay.style.color = "var(--primary-color)";
+                }
+                return; 
+            }
+
+            tiempoRestante = tiempoElegido;
             actualizarPantallaTemporizador();
 
             temporizadorInterval = setInterval(() => {
@@ -937,7 +1063,7 @@
                     detenerTemporizador();
                     tiempoAgotado();
                 }
-            }, 1000); // 1000 milisegundos = 1 segundo
+            }, 1000); 
         }
 
         function detenerTemporizador() {
@@ -951,7 +1077,6 @@
             const timerDisplay = document.getElementById('timer-display');
             if (timerDisplay) {
                 timerDisplay.innerText = `⏱️ ${tiempoRestante}s`;
-                // Si quedan 10 segundos o menos, se pone en color rojo de alerta
                 if (tiempoRestante <= 10) {
                     timerDisplay.style.color = 'var(--error-color)'; 
                 } else {
@@ -997,28 +1122,53 @@
             }
         }
 
-        function iniciarSimulacroGlobal() {
+        function abrirConfiguracion() {
             modoActual = 'simulador';
-            esSimulacroGlobal = true;
+            modeSection.style.display = 'none';
+            menuSection.style.display = 'none';
+            document.getElementById('config-section').style.display = 'block';
+            subtitle.innerText = "Personaliza las reglas de tu simulacro";
+        }
+
+        function iniciarSimulacroPersonalizado() {
+            esSimulacroGlobal = true; // Reutilizamos esta variable para los resultados
+            esModoErrores = false;
             preguntasActuales = [];
             
-            for (const materiaKey in baseDeDatos) {
-                let preguntasMateria = [...baseDeDatos[materiaKey].preguntas];
-                preguntasMateria.sort(() => Math.random() - 0.5);
-                let diezPreguntas = preguntasMateria.slice(0, 10);
-                preguntasActuales = preguntasActuales.concat(diezPreguntas);
+            // 1. Obtener materias seleccionadas
+            const checkboxes = document.querySelectorAll('#config-materias input[type="checkbox"]:checked');
+            if (checkboxes.length === 0) {
+                alert("Debes seleccionar al menos una materia para poder iniciar.");
+                return;
             }
-            
+
+            // 2. Extraer TODAS las preguntas de las materias palomeadas
+            checkboxes.forEach(chk => {
+                let materiaKey = chk.value;
+                let preguntasMateria = [...baseDeDatos[materiaKey].preguntas];
+                preguntasActuales = preguntasActuales.concat(preguntasMateria);
+            });
+
+            // 3. Mezclar el mega bloque gigante
             preguntasActuales.sort(() => Math.random() - 0.5);
-            
+
+            // 4. Recortar exactamente a la cantidad que moviste en el deslizador
+            const numElegido = parseInt(document.getElementById('config-num-preguntas').value);
+            if (numElegido < preguntasActuales.length) {
+                preguntasActuales = preguntasActuales.slice(0, numElegido);
+            }
+
+            // 5. Configurar el tiempo que elegiste en el menú desplegable
+            tiempoElegido = parseInt(document.getElementById('config-tiempo').value);
+
+            // 6. Configurar la vista
             indicePregunta = 0;
             puntaje = 0;
 
-            modeSection.style.display = 'none';
-            menuSection.style.display = 'none';
+            document.getElementById('config-section').style.display = 'none';
             quizSection.style.display = 'block';
             
-            document.getElementById('subject-title').innerText = `🏆 Examen Final Global (40 Preguntas)`;
+            document.getElementById('subject-title').innerText = `🏆 Reto Personalizado (${preguntasActuales.length} Pregs)`;
             document.getElementById('feedback-box').classList.remove('show');
 
             cargarPregunta();
@@ -1063,6 +1213,7 @@
 
         function iniciarEstudio(inicio, fin, numBloque) {
             esSimulacroGlobal = false;
+            esModoErrores = false;
             inicioGuardado = inicio;
             finGuardado = fin;
             bloqueActualTexto = `Bloque ${numBloque}`;
@@ -1117,6 +1268,7 @@
 
         function iniciarQuiz(inicio, fin, numBloque) {
             esSimulacroGlobal = false;
+            esModoErrores = false;
             bloqueActualTexto = typeof numBloque === 'string' ? `Bloque ${numBloque}` : `Bloque ${numBloque}`;
             
             preguntasActuales = [...baseDeDatos[materiaActual].preguntas.slice(inicio, fin)];
@@ -1191,6 +1343,8 @@
                 feedbackBox.style.backgroundColor = '#d4edda';
                 feedbackBox.style.color = '#155724';
                 feedbackBox.style.border = '1px solid #c3e6cb';
+                // NUEVO: Si acertó, la quitamos de la lista de errores
+                quitarDeErrores(pregunta.pregunta);
             } else {
                 botonSeleccionado.classList.add('wrong');
                 
@@ -1203,6 +1357,8 @@
                 feedbackBox.style.backgroundColor = '#f8d7da';
                 feedbackBox.style.color = '#721c24';
                 feedbackBox.style.border = '1px solid #f5c6cb';
+                // NUEVO: Si se equivocó, guardamos esta pregunta
+                agregarAErrores(pregunta);
             }
 
             feedbackBox.innerHTML = `<strong>Explicación:</strong> ${pregunta.explicacion}`;
@@ -1232,7 +1388,11 @@
             const mensaje = document.getElementById('result-message');
             const btnOtroBloque = document.getElementById('btn-otro-bloque');
             
-            if(esSimulacroGlobal) {
+            if (esModoErrores) {
+                titulo.innerText = "¡Repaso de Errores Terminado!";
+                btnOtroBloque.style.display = 'none'; 
+                mensaje.innerText = "Las preguntas que respondiste correctamente han sido eliminadas de tu lista. ¡Sigue así hasta dejarla en cero!";
+            } else if(esSimulacroGlobal) {
                 titulo.innerText = "¡Simulacro Global Terminado!";
                 btnOtroBloque.style.display = 'none'; 
                 
@@ -1268,6 +1428,7 @@
             modeSection.style.display = 'grid';
             subtitle.innerText = "¿Qué deseas hacer hoy?";
             detenerTemporizador();
+            document.getElementById('config-section').style.display = 'none';
         }
 
         function volverAlMenu() {
