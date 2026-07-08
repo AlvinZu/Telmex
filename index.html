@@ -399,7 +399,10 @@
         <div id="quiz-section">
             <div class="question-header">
                 <span id="subject-title">Materia - Bloque X</span>
-                <span id="question-counter">Pregunta 1 / 10</span>
+                <div>
+                    <span id="timer-display" style="margin-right: 15px; font-weight: bold; font-size: 1.2rem; color: var(--primary-color);">⏱️ 45s</span>
+                    <span id="question-counter">Pregunta 1 / 10</span>
+                </div>
             </div>
             <div class="question-text" id="question-text">¿Aquí va la pregunta?</div>
             <div class="options-list" id="options-list"></div>
@@ -914,6 +917,72 @@
         const resultSection = document.getElementById('result-section');
         const subtitle = document.getElementById('header-subtitle');
         const blockContainer = document.getElementById('block-container');
+      
+        // ==========================================
+        // LÓGICA DEL TEMPORIZADOR
+        // ==========================================
+        let tiempoRestante = 59;
+        let temporizadorInterval = null;
+
+        function iniciarTemporizador() {
+            detenerTemporizador(); // Limpiar por si acaso había uno corriendo
+            tiempoRestante = 59;
+            actualizarPantallaTemporizador();
+
+            temporizadorInterval = setInterval(() => {
+                tiempoRestante--;
+                actualizarPantallaTemporizador();
+
+                if (tiempoRestante <= 0) {
+                    detenerTemporizador();
+                    tiempoAgotado();
+                }
+            }, 1000); // 1000 milisegundos = 1 segundo
+        }
+
+        function detenerTemporizador() {
+            if (temporizadorInterval) {
+                clearInterval(temporizadorInterval);
+                temporizadorInterval = null;
+            }
+        }
+
+        function actualizarPantallaTemporizador() {
+            const timerDisplay = document.getElementById('timer-display');
+            if (timerDisplay) {
+                timerDisplay.innerText = `⏱️ ${tiempoRestante}s`;
+                // Si quedan 10 segundos o menos, se pone en color rojo de alerta
+                if (tiempoRestante <= 10) {
+                    timerDisplay.style.color = 'var(--error-color)'; 
+                } else {
+                    timerDisplay.style.color = 'var(--primary-color)'; 
+                }
+            }
+        }
+
+        function tiempoAgotado() {
+            // Esta función se activa si el reloj llega a cero
+            const opcionesBotones = document.querySelectorAll('.option-btn');
+            opcionesBotones.forEach(btn => btn.disabled = true); // Bloquea los botones
+
+            const pregunta = preguntasActuales[indicePregunta];
+            const feedbackBox = document.getElementById('feedback-box');
+
+            // Muestra cuál era la correcta aunque no haya respondido
+            const botonCorrecto = Array.from(opcionesBotones).find(btn => btn.dataset.esCorrecto === "true");
+            if (botonCorrecto) {
+                botonCorrecto.classList.add('correct');
+            }
+
+            feedbackBox.style.backgroundColor = '#f8d7da';
+            feedbackBox.style.color = '#721c24';
+            feedbackBox.style.border = '1px solid #f5c6cb';
+            feedbackBox.innerHTML = `<strong>¡Tiempo agotado! ⏳</strong><br><strong>Explicación:</strong> ${pregunta.explicacion}`;
+            feedbackBox.classList.add('show');
+
+            document.getElementById('next-btn').disabled = false; // Habilita ir a la siguiente
+        }
+        // ==========================================
 
         function seleccionarModo(modo) {
             modoActual = modo;
@@ -1081,20 +1150,39 @@
             const listaOpciones = document.getElementById('options-list');
             listaOpciones.innerHTML = '';
 
-            pregunta.opciones.forEach((opcionTexto, index) => {
+            // 1. Mapeamos las opciones para conservar su índice original (A, B, C, D) antes de mezclar
+            let opcionesMezcladas = pregunta.opciones.map((textoOriginal, indiceOriginal) => {
+                return { texto: textoOriginal, indiceOriginal: indiceOriginal };
+            });
+
+            // 2. Mezclamos el arreglo de opciones aleatoriamente
+            opcionesMezcladas.sort(() => Math.random() - 0.5);
+
+            // 3. Imprimimos los botones ya mezclados
+            opcionesMezcladas.forEach((opcion) => {
                 const btn = document.createElement('button');
                 btn.className = 'option-btn';
-                btn.innerText = opcionTexto;
-                btn.onclick = () => verificarRespuesta(index, btn);
+                btn.innerText = opcion.texto;
+                
+                // Etiquetamos ocultamente cuál es el botón correcto para poder pintarlo si nos equivocamos
+                if (opcion.indiceOriginal === pregunta.respuestaCorrecta) {
+                    btn.dataset.esCorrecto = "true";
+                }
+
+                btn.onclick = () => verificarRespuesta(opcion.indiceOriginal, btn);
                 listaOpciones.appendChild(btn);
             });
+            iniciarTemporizador(); // Arranca el reloj cada que sale una pregunta nueva
         }
 
         function verificarRespuesta(indiceSeleccionado, botonSeleccionado) {
             const pregunta = preguntasActuales[indicePregunta];
             const opcionesBotones = document.querySelectorAll('.option-btn');
             const feedbackBox = document.getElementById('feedback-box');
+          
+            detenerTemporizador(); // Detiene el reloj en el instante que el usuario elige una respuesta
 
+            // Bloqueamos todos los botones para que no se pueda responder dos veces
             opcionesBotones.forEach(btn => btn.disabled = true);
 
             if (indiceSeleccionado === pregunta.respuestaCorrecta) {
@@ -1105,7 +1193,13 @@
                 feedbackBox.style.border = '1px solid #c3e6cb';
             } else {
                 botonSeleccionado.classList.add('wrong');
-                opcionesBotones[pregunta.respuestaCorrecta].classList.add('correct');
+                
+                // Buscamos el botón que tiene la etiqueta de correcto y lo pintamos de verde
+                const botonCorrecto = Array.from(opcionesBotones).find(btn => btn.dataset.esCorrecto === "true");
+                if (botonCorrecto) {
+                    botonCorrecto.classList.add('correct');
+                }
+
                 feedbackBox.style.backgroundColor = '#f8d7da';
                 feedbackBox.style.color = '#721c24';
                 feedbackBox.style.border = '1px solid #f5c6cb';
@@ -1161,6 +1255,7 @@
                     mensaje.innerText = "Te sugerimos seguir repasando el material de este bloque.";
                 }
             }
+          detenerTemporizador();
         }
 
         function volverInicio() {
@@ -1172,6 +1267,7 @@
             
             modeSection.style.display = 'grid';
             subtitle.innerText = "¿Qué deseas hacer hoy?";
+            detenerTemporizador();
         }
 
         function volverAlMenu() {
@@ -1182,6 +1278,7 @@
             } else {
                 subtitle.innerText = "Modo Simulador: Selecciona una materia para iniciar tu prueba";
             }
+          detenerTemporizador();
         }
 
         function volverABloques() {
@@ -1194,6 +1291,7 @@
             } else {
                 seleccionarMateria(materiaActual);
             }
+          detenerTemporizador();
         }
       
       // =========================================================
