@@ -397,6 +397,11 @@
                 Repasar Errores
                 <span style="font-size: 1rem; font-weight: normal; color: #555; margin-top: 10px;">Ponte a prueba solo con las que has fallado.</span>
             </div>
+          <div class="card-btn" onclick="seleccionarModo('ejercicios')" style="background-color: #e8f5e9; border-color: #81c784;">
+                <span style="font-size: 2.5rem; margin-bottom: 10px;">✍️</span>
+                Ejercicios Resueltos
+                <span style="font-size: 1rem; font-weight: normal; color: #555; margin-top: 10px;">Aprende el desarrollo paso a paso.</span>
+            </div>
         </div>
       
       <div id="config-section" style="display: none;">
@@ -488,6 +493,19 @@
             <div class="controls-group">
                 <button class="btn-action btn-back" onclick="volverABloques()">⬅ Regresar a Bloques</button>
                 <button class="btn-action" onclick="irASimuladorDesdeEstudio()">Pasar al Simulador ➡</button>
+            </div>
+        </div>
+      <div id="exercises-section" style="display: none;">
+            <div class="question-header">
+                <span id="exercises-subject-title">Ejercicios Resueltos</span>
+            </div>
+            
+            <div id="exercises-content-list" style="max-height: 55vh; overflow-y: auto; padding-right: 10px;">
+                </div>
+
+            <div class="controls-group" style="margin-top: 20px;">
+                <button class="btn-action btn-back" onclick="volverInicio()">⬅ Regresar al Inicio</button>
+                <button class="btn-action" onclick="volverAlMenu()">📚 Cambiar de Materia</button>
             </div>
         </div>
 
@@ -958,6 +976,682 @@
                 ]
             }
         };
+      
+      // ==========================================
+        // BASE DE DATOS DE EJERCICIOS RESUELTOS
+        // ==========================================
+        const baseEjercicios = {
+            electronica: [
+                {
+                    problema: "1. Conversión Decimal a Binario: Convertir el número Decimal 45 al sistema Binario.",
+                    desarrollo: `
+                        Para convertir de decimal a binario, dividimos el número entre 2 y anotamos el residuo, repitiendo el proceso con el cociente hasta llegar a 0.<br><br>
+                        1. 45 ÷ 2 = 22 (Residuo: <strong>1</strong>)<br>
+                        2. 22 ÷ 2 = 11 (Residuo: <strong>0</strong>)<br>
+                        3. 11 ÷ 2 = 5 (Residuo: <strong>1</strong>)<br>
+                        4. 5 ÷ 2 = 2 (Residuo: <strong>1</strong>)<br>
+                        5. 2 ÷ 2 = 1 (Residuo: <strong>0</strong>)<br>
+                        6. 1 ÷ 2 = 0 (Residuo: <strong>1</strong>)<br><br>
+                        <strong>Respuesta:</strong> Leyendo los residuos de abajo hacia arriba (del último al primero), el número 45 en binario es <strong>101101</strong>.
+                    `
+                },
+                {
+                    problema: "2. Conversión Binario a Decimal: Convertir el número Binario 11011 al sistema Decimal.",
+                    desarrollo: `
+                        Cada dígito binario tiene un "peso" que es potencia de 2, de derecha a izquierda, comenzando desde 2⁰ (que es 1).<br><br>
+                        <strong>Paso 1:</strong> Asignamos los pesos a cada dígito de 11011:<br>
+                        (1 × 2⁴) + (1 × 2³) + (0 × 2²) + (1 × 2¹) + (1 × 2⁰)<br><br>
+                        <strong>Paso 2:</strong> Resolvemos las potencias:<br>
+                        (1 × 16) + (1 × 8) + (0 × 4) + (1 × 2) + (1 × 1)<br><br>
+                        <strong>Paso 3:</strong> Sumamos los resultados:<br>
+                        16 + 8 + 0 + 2 + 1 = 27<br><br>
+                        <strong>Respuesta:</strong> El número binario 11011 equivale a <strong>27</strong> en decimal.
+                    `
+                },
+                {
+                    problema: "3. Conversión Hexadecimal a Binario: Convertir el número Hexadecimal 2F a Binario.",
+                    desarrollo: `
+                        En el sistema hexadecimal, cada dígito se convierte directamente en un bloque de 4 bits (un nibble). Recordamos que la letra F equivale a 15 en decimal.<br><br>
+                        <strong>Paso 1:</strong> Convertimos el dígito '2' a 4 bits.<br>
+                        2 en binario es 0010.<br><br>
+                        <strong>Paso 2:</strong> Convertimos el dígito 'F' (15) a 4 bits.<br>
+                        15 en binario es 1111.<br><br>
+                        <strong>Paso 3:</strong> Juntamos ambos bloques.<br>
+                        0010 1111<br><br>
+                        <strong>Respuesta:</strong> 2F en binario es <strong>00101111</strong> (o simplemente 101111).
+                    `
+                },
+                {
+                    problema: "4. Conversión Binario a Octal: Convertir el número Binario 101110 a Octal.",
+                    desarrollo: `
+                        Para convertir a octal, se agrupan los bits de 3 en 3, empezando de derecha a izquierda.<br><br>
+                        <strong>Paso 1:</strong> Agrupamos 101110 en bloques de 3.<br>
+                        [101] [110]<br><br>
+                        <strong>Paso 2:</strong> Convertimos cada bloque a su valor decimal.<br>
+                        Bloque derecho: 110 = (1×4) + (1×2) + (0×1) = 6<br>
+                        Bloque izquierdo: 101 = (1×4) + (0×2) + (1×1) = 5<br><br>
+                        <strong>Paso 3:</strong> Unimos los números resultantes.<br><br>
+                        <strong>Respuesta:</strong> 101110 en octal es <strong>56</strong>.
+                    `
+                },
+                {
+                    problema: "5. Compuertas Lógicas: Dado el circuito X = (A AND B) OR C. Determinar la salida si A=1, B=0, C=1.",
+                    desarrollo: `
+                        Sustituimos los valores en la ecuación: X = (1 AND 0) OR 1.<br><br>
+                        <strong>Paso 1:</strong> Resolvemos el paréntesis (la compuerta AND). Recuerda que la compuerta AND es como una multiplicación.<br>
+                        1 × 0 = 0. Por lo tanto: (1 AND 0) = 0.<br><br>
+                        <strong>Paso 2:</strong> Ahora resolvemos la compuerta OR con el resultado anterior y el valor de C. La compuerta OR es como una suma lógica.<br>
+                        X = 0 OR 1<br>
+                        0 + 1 = 1.<br><br>
+                        <strong>Respuesta:</strong> La salida X del circuito lógico será <strong>1 (Nivel Alto)</strong>.
+                    `
+                },
+                {
+                    problema: "6. Compuertas Lógicas: Evaluar la expresión X = NOT(A OR B) AND C. Valores: A=0, B=0, C=1.",
+                    desarrollo: `
+                        Sustituimos los valores: X = NOT(0 OR 0) AND 1.<br><br>
+                        <strong>Paso 1:</strong> Resolvemos el paréntesis de la compuerta OR.<br>
+                        (0 OR 0) = 0.<br><br>
+                        <strong>Paso 2:</strong> Aplicamos la compuerta NOT (negación) a ese resultado.<br>
+                        NOT(0) = 1.<br><br>
+                        <strong>Paso 3:</strong> Multiplicamos (AND) con el valor de C.<br>
+                        1 AND 1 = 1.<br><br>
+                        <strong>Respuesta:</strong> La salida X es <strong>1</strong>.
+                    `
+                },
+                {
+                    problema: "7. Álgebra de Boole (Teorema de DeMorgan): Simplificar la expresión (A AND B)'.",
+                    desarrollo: `
+                        El teorema de DeMorgan es fundamental para simplificar circuitos digitales. Nos dice cómo tratar la negación de una operación completa.<br><br>
+                        <strong>Regla de DeMorgan:</strong> El complemento de un producto es igual a la suma de los complementos de las variables.<br><br>
+                        <strong>Paso 1:</strong> Cambiamos el signo de multiplicación (AND) por suma (OR).<br>
+                        <strong>Paso 2:</strong> Separamos la negación general (') aplicándola a cada variable individualmente.<br><br>
+                        <strong>Respuesta:</strong> La expresión simplificada es <strong>A' OR B'</strong> (A negada más B negada). Esto demuestra que una compuerta NAND equivale a una OR con entradas negadas.
+                    `
+                },
+                {
+                    problema: "8. Circuitos con Diodos (Ley de Ohm): Calcular la resistencia protectora para un LED de 2V y 20mA (0.02A) alimentado por una fuente de 5V.",
+                    desarrollo: `
+                        Para proteger un LED, la resistencia debe absorber el voltaje restante que el LED no necesita.<br><br>
+                        <strong>Paso 1:</strong> Calculamos el voltaje de la resistencia (Vr).<br>
+                        Vr = Voltaje Fuente - Voltaje LED<br>
+                        Vr = 5V - 2V = 3V.<br><br>
+                        <strong>Paso 2:</strong> Usamos la Ley de Ohm (R = V / I) para calcular el valor resistivo. La corriente I es 20mA, que equivale a 0.02A.<br>
+                        R = 3V / 0.02A = 150.<br><br>
+                        <strong>Respuesta:</strong> Se requiere una resistencia de <strong>150 Ohms (Ω)</strong> conectada en serie con el LED.
+                    `
+                },
+                {
+                    problema: "9. Transistores BJT: Calcular la Corriente de Colector (Ic) de un transistor si su ganancia Beta (β) es 100 y su Corriente de Base (Ib) es de 2mA.",
+                    desarrollo: `
+                        El transistor BJT (Bipolar Junction Transistor) funciona como un amplificador de corriente. La corriente del colector es proporcional a la corriente de base.<br><br>
+                        <strong>Fórmula:</strong> Ic = β × Ib<br><br>
+                        <strong>Paso 1:</strong> Sustituimos los valores en la fórmula.<br>
+                        Ic = 100 × 2mA<br><br>
+                        <strong>Paso 2:</strong> Realizamos la multiplicación.<br>
+                        Ic = 200mA.<br><br>
+                        <strong>Respuesta:</strong> La Corriente de Colector será de <strong>200 mA</strong>.
+                    `
+                },
+                {
+                    problema: "10. Transistores BJT (Ley de Corrientes): Si la corriente de Colector (Ic) es 50mA y la de Base (Ib) es 1mA, ¿cuál es la corriente de Emisor (Ie)?",
+                    desarrollo: `
+                        Por la Ley de Kirchhoff de corrientes aplicada al transistor bipolar, la corriente que sale por el emisor es la suma de las corrientes que entran por la base y el colector.<br><br>
+                        <strong>Fórmula:</strong> Ie = Ic + Ib<br><br>
+                        <strong>Paso 1:</strong> Sustituimos los valores.<br>
+                        Ie = 50mA + 1mA<br><br>
+                        <strong>Paso 2:</strong> Realizamos la suma.<br>
+                        Ie = 51mA.<br><br>
+                        <strong>Respuesta:</strong> La Corriente de Emisor es de <strong>51 mA</strong>.
+                    `
+                },
+                {
+                    problema: "11. Amplificador Operacional Inversor: Calcular la ganancia de voltaje (Av) si la resistencia de retroalimentación (Rf) es 10kΩ y la de entrada (Rin) es 2kΩ.",
+                    desarrollo: `
+                        En la configuración de Amplificador Inversor, la señal entra por la terminal negativa y su ganancia está dada por la relación de sus resistencias.<br><br>
+                        <strong>Fórmula:</strong> Av = -(Rf / Rin)<br><br>
+                        <strong>Paso 1:</strong> Sustituimos los valores (el signo menos indica que la onda de salida estará invertida 180°).<br>
+                        Av = -(10,000 / 2,000)<br><br>
+                        <strong>Paso 2:</strong> Realizamos la división.<br>
+                        Av = -5.<br><br>
+                        <strong>Respuesta:</strong> La ganancia del circuito es de <strong>-5</strong> (amplificará la señal 5 veces y la invertirá).
+                    `
+                },
+                {
+                    problema: "12. Amplificador Operacional No Inversor: Calcular la ganancia de voltaje si Rf = 10kΩ y Rin = 2kΩ.",
+                    desarrollo: `
+                        En la configuración No Inversora, la señal entra por la terminal positiva (+), por lo que la señal de salida no se invierte. La fórmula es diferente a la del inversor.<br><br>
+                        <strong>Fórmula:</strong> Av = 1 + (Rf / Rin)<br><br>
+                        <strong>Paso 1:</strong> Sustituimos los valores.<br>
+                        Av = 1 + (10,000 / 2,000)<br><br>
+                        <strong>Paso 2:</strong> Realizamos la división y sumamos el 1.<br>
+                        Av = 1 + 5 = 6.<br><br>
+                        <strong>Respuesta:</strong> La ganancia del circuito es de <strong>6</strong> (señal amplificada 6 veces, sin invertirse).
+                    `
+                },
+                {
+                    problema: "13. Constante de Tiempo RC: Calcular el tiempo (τ) de carga inicial de un circuito con una Resistencia de 10kΩ y un Capacitor de 100μF.",
+                    desarrollo: `
+                        La constante de tiempo Tau (τ) indica cuánto tarda un capacitor en cargarse al 63.2% de su capacidad total a través de una resistencia.<br><br>
+                        <strong>Fórmula:</strong> τ = R × C<br><br>
+                        <strong>Paso 1:</strong> Convertimos los valores a unidades base (Ohms y Faradios).<br>
+                        R = 10,000 Ω<br>
+                        C = 100 × 10⁻⁶ F (que es 0.0001 F)<br><br>
+                        <strong>Paso 2:</strong> Multiplicamos ambos valores.<br>
+                        τ = 10,000 × 0.0001 = 1 segundo.<br><br>
+                        <strong>Respuesta:</strong> La constante de tiempo Tau es de <strong>1 segundo</strong>. (Tardará unos 5 segundos en cargarse por completo).
+                    `
+                },
+                {
+                    problema: "14. Diodos Rectificadores: ¿Cuál es la frecuencia de salida de un rectificador de onda completa (puente de diodos) si la señal de entrada de CA es de 60Hz?",
+                    desarrollo: `
+                        En un rectificador de media onda, los semiciclos negativos se bloquean, por lo que la frecuencia se mantiene igual. Sin embargo, en un rectificador de onda completa, los semiciclos negativos se invierten (se vuelven positivos).<br><br>
+                        Esto genera el doble de pulsos (crestas) en el mismo periodo de tiempo.<br><br>
+                        <strong>Fórmula:</strong> f_salida = 2 × f_entrada<br>
+                        f_salida = 2 × 60Hz = 120Hz.<br><br>
+                        <strong>Respuesta:</strong> La frecuencia del voltaje de rizo a la salida será de <strong>120 Hz</strong>.
+                    `
+                },
+                {
+                    problema: "15. Caída de Voltaje en Silicio: Un circuito tiene una batería de 9V, un diodo de silicio (Si) polarizado en directa y una resistencia en serie. ¿Cuánto voltaje le llega realmente a la resistencia?",
+                    desarrollo: `
+                        En la electrónica práctica (modelo aproximado), un diodo de silicio no es un conductor perfecto. Requiere consumir un poco de voltaje para vencer su barrera interna y permitir el flujo de electrones.<br><br>
+                        Este voltaje de umbral para el Silicio es de aproximadamente 0.7V.<br><br>
+                        <strong>Paso 1:</strong> Restamos la caída de voltaje del diodo al voltaje total de la fuente.<br>
+                        V_resistencia = V_fuente - V_diodo<br>
+                        V_resistencia = 9V - 0.7V = 8.3V.<br><br>
+                        <strong>Respuesta:</strong> La resistencia recibirá un voltaje de <strong>8.3 Volts</strong>.
+                    `
+                }
+            ],
+            electricidad: [
+                {
+                    problema: "1. Conversión de Unidades (Prefijos): Convertir 0.025 Amperes a miliamperes (mA).",
+                    desarrollo: `
+                        El prefijo "mili" (m) significa la milésima parte de algo (10⁻³). Para convertir de una unidad base a "mili", debemos recorrer el punto decimal 3 lugares hacia la derecha (o multiplicar por 1000).<br><br>
+                        <strong>Paso 1:</strong> Tomamos el valor base: 0.025 A.<br>
+                        <strong>Paso 2:</strong> Recorremos el punto 3 lugares a la derecha:<br>
+                        1 lugar: 0.25<br>
+                        2 lugares: 2.5<br>
+                        3 lugares: 25.0<br><br>
+                        <strong>Respuesta:</strong> 0.025 Amperes es igual a <strong>25 mA</strong>.
+                    `
+                },
+                {
+                    problema: "2. Operaciones con Notación Científica: Dividir (8 x 10⁵) entre (2 x 10²).",
+                    desarrollo: `
+                        En la notación científica, al dividir, los números base se dividen normalmente y los exponentes (de la base 10) se restan.<br><br>
+                        <strong>Paso 1:</strong> Dividimos los números base: 8 ÷ 2 = <strong>4</strong>.<br>
+                        <strong>Paso 2:</strong> Restamos los exponentes de la base 10: 5 - 2 = <strong>3</strong>.<br>
+                        <strong>Paso 3:</strong> Unimos ambos resultados.<br><br>
+                        <strong>Respuesta:</strong> El resultado es <strong>4 x 10³</strong> (o 4,000 en decimal).
+                    `
+                },
+                {
+                    problema: "3. Ley de Ohm: Calcular la corriente que fluye por un circuito si se aplica un voltaje de 120V a una resistencia de 60 Ω.",
+                    desarrollo: `
+                        La Ley de Ohm establece que Corriente (I) = Voltaje (V) / Resistencia (R).<br><br>
+                        <strong>Paso 1:</strong> Identificamos los datos: V = 120V, R = 60Ω.<br>
+                        <strong>Paso 2:</strong> Sustituimos en la fórmula: I = 120 / 60.<br>
+                        <strong>Paso 3:</strong> Resolvemos la división: 120 ÷ 60 = 2.<br><br>
+                        <strong>Respuesta:</strong> La corriente eléctrica es de <strong>2 Amperes (A)</strong>.
+                    `
+                },
+                {
+                    problema: "4. Ley de Watt (Potencia): ¿Qué potencia consume un motor eléctrico conectado a 127V si demanda una corriente de 10A?",
+                    desarrollo: `
+                        La Ley de Watt establece que la Potencia eléctrica (P) es igual al Voltaje (V) multiplicado por la Corriente (I).<br><br>
+                        <strong>Fórmula:</strong> P = V × I<br>
+                        <strong>Paso 1:</strong> Identificamos los datos: V = 127V, I = 10A.<br>
+                        <strong>Paso 2:</strong> Sustituimos y multiplicamos: P = 127 × 10.<br>
+                        <strong>Paso 3:</strong> Resultado: 1270.<br><br>
+                        <strong>Respuesta:</strong> El motor consume <strong>1270 Watts</strong> (o 1.27 kW).
+                    `
+                },
+                {
+                    problema: "5. Resistencias en Serie: Calcular la Resistencia Total (Rt) de un circuito que tiene tres resistencias en serie: R1=10Ω, R2=20Ω y R3=30Ω.",
+                    desarrollo: `
+                        Cuando las resistencias están conectadas una tras otra (en serie), la resistencia total es simplemente la suma directa de todas ellas.<br><br>
+                        <strong>Fórmula:</strong> Rt = R1 + R2 + R3<br>
+                        <strong>Paso 1:</strong> Sustituimos los valores: Rt = 10 + 20 + 30.<br>
+                        <strong>Paso 2:</strong> Realizamos la suma: Rt = 60.<br><br>
+                        <strong>Respuesta:</strong> La Resistencia Total es de <strong>60 Ω</strong>.
+                    `
+                },
+                {
+                    problema: "6. Resistencias en Paralelo: Calcular la Resistencia Total (Rt) de dos resistencias conectadas en paralelo: R1=60Ω y R2=30Ω.",
+                    desarrollo: `
+                        En paralelo, la resistencia equivalente siempre será menor que la resistencia más baja. Se calcula sumando los inversos.<br><br>
+                        <strong>Fórmula:</strong> 1/Rt = (1/R1) + (1/R2)<br>
+                        <strong>Paso 1:</strong> Sustituimos: 1/Rt = (1/60) + (1/30).<br>
+                        <strong>Paso 2:</strong> Buscamos común denominador (60): 1/60 + 2/60 = 3/60.<br>
+                        <strong>Paso 3:</strong> Como 1/Rt = 3/60, invertimos la fracción para obtener Rt: Rt = 60 / 3.<br>
+                        <strong>Paso 4:</strong> Dividimos: 60 ÷ 3 = 20.<br><br>
+                        <strong>Respuesta:</strong> La Resistencia Total es de <strong>20 Ω</strong>.
+                    `
+                },
+                {
+                    problema: "7. Capacitores en Paralelo: Calcular la Capacitancia Total (Ct) de dos capacitores en paralelo: C1=15μF y C2=25μF.",
+                    desarrollo: `
+                        ¡Atención! Las reglas de los capacitores son EXACTAMENTE al revés que las de las resistencias. En paralelo, los capacitores se suman directamente (como si fueran resistencias en serie).<br><br>
+                        <strong>Fórmula:</strong> Ct = C1 + C2<br>
+                        <strong>Paso 1:</strong> Sustituimos los valores: Ct = 15μF + 25μF.<br>
+                        <strong>Paso 2:</strong> Sumamos: 40.<br><br>
+                        <strong>Respuesta:</strong> La Capacitancia Total es de <strong>40 μF</strong>.
+                    `
+                },
+                {
+                    problema: "8. Capacitores en Serie: Calcular la Capacitancia Total de dos capacitores en serie: C1=10μF y C2=10μF.",
+                    desarrollo: `
+                        Como vimos, los capacitores en serie se calculan como las resistencias en paralelo (usando inversos). Un truco rápido: si dos capacitores EN SERIE son del mismo valor, la capacitancia total es exactamente la mitad de uno de ellos.<br><br>
+                        <strong>Cálculo rápido:</strong> 10μF / 2 = 5μF.<br>
+                        <strong>Cálculo formal:</strong> 1/Ct = 1/10 + 1/10 = 2/10. Invirtiendo: 10 / 2 = 5.<br><br>
+                        <strong>Respuesta:</strong> La Capacitancia Total es de <strong>5 μF</strong>.
+                    `
+                },
+                {
+                    problema: "9. Corriente Alterna (Frecuencia y Periodo): Si la frecuencia eléctrica comercial en México es de 60 Hz, ¿cuánto tiempo dura un solo ciclo (Periodo T)?",
+                    desarrollo: `
+                        La Frecuencia (f) y el Periodo (T) son inversamente proporcionales. El Periodo es el tiempo que tarda la onda en completar un ciclo (positivo y negativo).<br><br>
+                        <strong>Fórmula:</strong> T = 1 / f<br>
+                        <strong>Paso 1:</strong> Sustituimos el valor: T = 1 / 60.<br>
+                        <strong>Paso 2:</strong> Realizamos la división: 1 ÷ 60 = 0.01666 segundos.<br><br>
+                        <strong>Respuesta:</strong> Un ciclo dura <strong>0.0166 segundos</strong> (o 16.6 milisegundos).
+                    `
+                },
+                {
+                    problema: "10. Corriente Alterna (RMS a Pico): Si tu multímetro mide 120V en el enchufe de tu casa, ¿cuál es el voltaje pico (máximo) real que alcanza la onda?",
+                    desarrollo: `
+                        Los multímetros siempre miden el voltaje RMS (Eficaz). Para encontrar la cresta máxima de la onda senoidal (Voltaje Pico), debemos multiplicar el valor RMS por la raíz cuadrada de 2 (aproximadamente 1.414).<br><br>
+                        <strong>Fórmula:</strong> Vp = Vrms × √2<br>
+                        <strong>Paso 1:</strong> Sustituimos: Vp = 120 × 1.4142.<br>
+                        <strong>Paso 2:</strong> Multiplicamos: 169.7.<br><br>
+                        <strong>Respuesta:</strong> La onda alcanza un pico máximo de <strong>169.7 Volts</strong>.
+                    `
+                },
+                {
+                    problema: "11. Transformadores (Relación de Vueltas): Un transformador tiene 1000 vueltas en su devanado primario y 100 vueltas en el secundario. Si se le aplican 120V de CA al primario, ¿qué voltaje saldrá por el secundario?",
+                    desarrollo: `
+                        El voltaje en un transformador ideal es directamente proporcional al número de vueltas de sus bobinas.<br><br>
+                        <strong>Fórmula:</strong> (Vp / Vs) = (Np / Ns)<br>
+                        <strong>Paso 1:</strong> Relación de vueltas: 1000 vueltas primario / 100 vueltas secundario = 10. Es decir, el transformador reduce el voltaje 10 veces.<br>
+                        <strong>Paso 2:</strong> Dividimos el voltaje de entrada entre la relación: 120V / 10 = 12V.<br><br>
+                        <strong>Respuesta:</strong> El voltaje en el secundario será de <strong>12 Volts de CA</strong>.
+                    `
+                },
+                {
+                    problema: "12. Sistemas Trifásicos (Conexión Estrella): En un sistema trifásico comercial conectado en Estrella (Y), si mides el Voltaje de Fase (entre una Línea y el Neutro) y obtienes 127V, ¿cuánto será el Voltaje de Línea (medido entre dos Líneas vivas)?",
+                    desarrollo: `
+                        En una conexión Estrella, el voltaje medido entre dos líneas diferentes (L1 y L2) no es el doble, sino que equivale al voltaje de Fase (Línea-Neutro) multiplicado por la raíz cuadrada de 3 (√3 = 1.732).<br><br>
+                        <strong>Fórmula:</strong> V_Linea = V_Fase × √3<br>
+                        <strong>Paso 1:</strong> Sustituimos: V_Linea = 127V × 1.732.<br>
+                        <strong>Paso 2:</strong> Multiplicamos: 219.96V (redondeado a 220V).<br><br>
+                        <strong>Respuesta:</strong> El Voltaje de Línea es de <strong>220 Volts</strong>.
+                    `
+                },
+                {
+                    problema: "13. Factor de Potencia: Una instalación industrial tiene un consumo de Potencia Aparente de 1000 kVA, pero su Potencia Activa o Real es de 800 kW. ¿Cuál es su Factor de Potencia?",
+                    desarrollo: `
+                        El Factor de Potencia (FP) nos indica la eficiencia del uso de la electricidad, y es una relación (división) entre la potencia que hace trabajo útil (Watts) y la potencia total facturada (VA).<br><br>
+                        <strong>Fórmula:</strong> FP = Potencia Real (kW) / Potencia Aparente (kVA)<br>
+                        <strong>Paso 1:</strong> Sustituimos: FP = 800 / 1000.<br>
+                        <strong>Paso 2:</strong> Realizamos la división: 0.8.<br><br>
+                        <strong>Respuesta:</strong> El Factor de Potencia es de <strong>0.8</strong> (u 80%).
+                    `
+                },
+                {
+                    problema: "14. Divisor de Voltaje: En un circuito serie alimentado a 24V hay dos resistencias: R1=4Ω y R2=8Ω. ¿Qué caída de voltaje habrá específicamente en la R2?",
+                    desarrollo: `
+                        Primero debemos conocer la corriente del circuito, o usar la fórmula del divisor de voltaje.<br><br>
+                        <strong>Método Ley de Ohm paso a paso:</strong><br>
+                        1. Resistencia total: Rt = 4 + 8 = 12Ω.<br>
+                        2. Corriente del circuito: I = 24V / 12Ω = 2A.<br>
+                        3. Caída de voltaje en R2: V2 = I × R2<br>
+                        4. V2 = 2A × 8Ω = 16V.<br><br>
+                        <strong>Respuesta:</strong> En la resistencia R2 habrá una caída de <strong>16 Volts</strong>.
+                    `
+                },
+                {
+                    problema: "15. Resistencia de los Conductores: Si un rollo de 100 metros de cable de cobre tiene una resistencia de 2 Ohms, ¿cuánta resistencia tendrán 250 metros del mismo cable?",
+                    desarrollo: `
+                        La resistencia de un cable es directamente proporcional a su longitud. A mayor largo, mayor resistencia, porque los electrones deben viajar más distancia.<br><br>
+                        <strong>Paso 1:</strong> Calculamos la resistencia por cada metro de cable.<br>
+                        2 Ohms / 100 metros = 0.02 Ohms por metro.<br><br>
+                        <strong>Paso 2:</strong> Multiplicamos esta resistencia unitaria por los metros deseados.<br>
+                        0.02 Ohms/m × 250 metros = 5 Ohms.<br><br>
+                        <strong>Respuesta:</strong> 250 metros de cable tendrán una resistencia de <strong>5 Ohms</strong>.
+                    `
+                }
+            ],
+            algebra: [
+                {
+                    problema: "1. Leyes de los Exponentes: Simplificar la expresión (x³) · (x⁵).",
+                    desarrollo: `
+                        Cuando multiplicamos dos potencias que tienen la misma base (en este caso la letra 'x'), la regla de los exponentes dice que la base se queda igual y los exponentes se suman.<br><br>
+                        <strong>Paso 1:</strong> Identificamos la base común: <strong>x</strong>.<br>
+                        <strong>Paso 2:</strong> Sumamos los exponentes: <strong>3 + 5 = 8</strong>.<br><br>
+                        <strong>Respuesta:</strong> El resultado es <strong>x⁸</strong>.
+                    `
+                },
+                {
+                    problema: "2. División de Monomios: Dividir 15x⁴y³ entre 5x²y.",
+                    desarrollo: `
+                        En la división algebraica, los coeficientes (números) se dividen de forma normal, y a los exponentes de las letras iguales se les resta el de abajo al de arriba.<br><br>
+                        <strong>Paso 1:</strong> Dividimos los números: 15 ÷ 5 = <strong>3</strong>.<br>
+                        <strong>Paso 2:</strong> Restamos los exponentes de la 'x': 4 - 2 = <strong>2</strong> (queda x²).<br>
+                        <strong>Paso 3:</strong> Restamos los exponentes de la 'y': 3 - 1 = <strong>2</strong> (queda y²).<br><br>
+                        <strong>Respuesta:</strong> <strong>3x²y²</strong>.
+                    `
+                },
+                {
+                    problema: "3. Resta de Polinomios: Resolver (3x² + 2x - 5) - (x² - 3x + 4).",
+                    desarrollo: `
+                        El signo menos antes del segundo paréntesis cambia TODOS los signos de los términos que están adentro.<br><br>
+                        <strong>Paso 1:</strong> Quitamos paréntesis aplicando el signo negativo al segundo grupo:<br>
+                        3x² + 2x - 5 <strong>- x² + 3x - 4</strong><br><br>
+                        <strong>Paso 2:</strong> Agrupamos y sumamos los términos semejantes (las x² con las x², las x con las x, y los números sueltos):<br>
+                        (3x² - x²) + (2x + 3x) + (-5 - 4)<br><br>
+                        <strong>Paso 3:</strong> Resolvemos:<br>
+                        2x² + 5x - 9<br><br>
+                        <strong>Respuesta:</strong> <strong>2x² + 5x - 9</strong>.
+                    `
+                },
+                {
+                    problema: "4. Multiplicación de Binomios: Multiplicar (2x - 3)(x + 4).",
+                    desarrollo: `
+                        Usamos la propiedad distributiva: cada término del primer paréntesis multiplica a cada término del segundo.<br><br>
+                        <strong>Paso 1:</strong> Multiplicamos el 2x por los dos del otro lado:<br>
+                        (2x)(x) = 2x²<br>
+                        (2x)(4) = +8x<br><br>
+                        <strong>Paso 2:</strong> Multiplicamos el -3 por los dos del otro lado:<br>
+                        (-3)(x) = -3x<br>
+                        (-3)(4) = -12<br><br>
+                        <strong>Paso 3:</strong> Juntamos todo y reducimos términos semejantes (8x - 3x):<br>
+                        2x² + 8x - 3x - 12 = 2x² + 5x - 12.<br><br>
+                        <strong>Respuesta:</strong> <strong>2x² + 5x - 12</strong>.
+                    `
+                },
+                {
+                    problema: "5. Factorización (Factor Común): Factorizar 12a³b² - 8a²b³.",
+                    desarrollo: `
+                        Buscamos qué tienen en común ambos términos, tanto en números (Máximo Común Divisor) como en letras (la de menor exponente).<br><br>
+                        <strong>Paso 1:</strong> El divisor más grande de 12 y 8 es el <strong>4</strong>.<br>
+                        <strong>Paso 2:</strong> De la letra 'a', la menor es <strong>a²</strong>. De la 'b', la menor es <strong>b²</strong>.<br>
+                        <strong>Paso 3:</strong> El factor común es <strong>4a²b²</strong>.<br>
+                        <strong>Paso 4:</strong> Dividimos la expresión original entre el factor común para hallar lo que queda dentro del paréntesis:<br>
+                        (12a³b² / 4a²b²) = 3a<br>
+                        (-8a²b³ / 4a²b²) = -2b<br><br>
+                        <strong>Respuesta:</strong> <strong>4a²b²(3a - 2b)</strong>.
+                    `
+                },
+                {
+                    problema: "6. Factorización (Diferencia de Cuadrados): Factorizar 16x² - 49.",
+                    desarrollo: `
+                        Una diferencia (resta) de dos cuadrados perfectos siempre se factoriza abriendo dos paréntesis conjugados (uno con suma y otro con resta).<br><br>
+                        <strong>Paso 1:</strong> Obtenemos la raíz cuadrada del primer término:<br>
+                        √16x² = <strong>4x</strong><br><br>
+                        <strong>Paso 2:</strong> Obtenemos la raíz cuadrada del segundo término:<br>
+                        √49 = <strong>7</strong><br><br>
+                        <strong>Paso 3:</strong> Colocamos ambos resultados en dos paréntesis alternando el signo central.<br><br>
+                        <strong>Respuesta:</strong> <strong>(4x + 7)(4x - 7)</strong>.
+                    `
+                },
+                {
+                    problema: "7. Factorización (Trinomio Cuadrado Perfecto): Factorizar x² + 10x + 25.",
+                    desarrollo: `
+                        Para comprobar que es un TCP, verificamos las raíces de los extremos y su doble producto.<br><br>
+                        <strong>Paso 1:</strong> Raíz del primero: √x² = <strong>x</strong><br>
+                        <strong>Paso 2:</strong> Raíz del tercero: √25 = <strong>5</strong><br>
+                        <strong>Paso 3:</strong> Comprobamos el de en medio: 2 * (x) * (5) = 10x (¡Es correcto!).<br><br>
+                        <strong>Paso 4:</strong> Se escribe en un solo paréntesis elevado al cuadrado, usando el signo del término del medio (+).<br><br>
+                        <strong>Respuesta:</strong> <strong>(x + 5)²</strong>.
+                    `
+                },
+                {
+                    problema: "8. Factorización (Trinomio x² + bx + c): Factorizar x² - 7x + 12.",
+                    desarrollo: `
+                        Al no ser un trinomio cuadrado perfecto, buscamos dos números que multiplicados den el tercer término (+12) y que sumados o restados den el término central (-7).<br><br>
+                        <strong>Paso 1:</strong> Abrimos dos paréntesis iniciando con la raíz del primer término: (x ... )(x ... ).<br>
+                        <strong>Paso 2:</strong> Buscamos las combinaciones que multiplican 12: (1x12), (2x6), (3x4).<br>
+                        <strong>Paso 3:</strong> ¿Cuáles de esos sumados dan -7? Tienen que ser -3 y -4, ya que (-3)(-4) = +12 y (-3) + (-4) = -7.<br><br>
+                        <strong>Respuesta:</strong> <strong>(x - 3)(x - 4)</strong>.
+                    `
+                },
+                {
+                    problema: "9. Fracciones Algebraicas: Simplificar la expresión (x² - 9) / (x² + 3x).",
+                    desarrollo: `
+                        Nunca canceles sumas o restas directas. La regla de oro es PRIMERO FACTORIZAR todo lo posible.<br><br>
+                        <strong>Paso 1:</strong> Factorizamos el numerador (es una diferencia de cuadrados).<br>
+                        x² - 9 = (x - 3)(x + 3)<br><br>
+                        <strong>Paso 2:</strong> Factorizamos el denominador (sacamos factor común 'x').<br>
+                        x² + 3x = x(x + 3)<br><br>
+                        <strong>Paso 3:</strong> Reescribimos la fracción: <strong>(x - 3)(x + 3) / x(x + 3)</strong><br>
+                        <strong>Paso 4:</strong> Como (x + 3) está multiplicando arriba y abajo, los cancelamos.<br><br>
+                        <strong>Respuesta:</strong> <strong>(x - 3) / x</strong>.
+                    `
+                },
+                {
+                    problema: "10. Ecuaciones de 1er Grado: Resolver 4x - 5 = 2x + 7.",
+                    desarrollo: `
+                        El objetivo es despejar la incógnita 'x', pasándola de un solo lado de la igualdad.<br><br>
+                        <strong>Paso 1:</strong> Pasamos el 2x al lado izquierdo (pasa restando) y el -5 al lado derecho (pasa sumando).<br>
+                        4x - 2x = 7 + 5<br><br>
+                        <strong>Paso 2:</strong> Realizamos las operaciones.<br>
+                        2x = 12<br><br>
+                        <strong>Paso 3:</strong> El 2 que multiplica a la 'x' pasa dividiendo.<br>
+                        x = 12 / 2<br><br>
+                        <strong>Respuesta:</strong> <strong>x = 6</strong>.
+                    `
+                },
+                {
+                    problema: "11. Ecuaciones con Paréntesis: Resolver 2(x - 3) = 4.",
+                    desarrollo: `
+                        Primero eliminamos el paréntesis mediante la propiedad distributiva.<br><br>
+                        <strong>Paso 1:</strong> Multiplicamos el 2 por todo lo de adentro.<br>
+                        2x - 6 = 4<br><br>
+                        <strong>Paso 2:</strong> Pasamos el -6 al otro lado sumando.<br>
+                        2x = 4 + 6<br>
+                        2x = 10<br><br>
+                        <strong>Paso 3:</strong> Despejamos 'x' pasando el 2 dividiendo.<br>
+                        x = 10 / 2<br><br>
+                        <strong>Respuesta:</strong> <strong>x = 5</strong>.
+                    `
+                },
+                {
+                    problema: "12. Sistemas de Ecuaciones 2x2 (Método Reducción): Resolver el sistema: [Ecuación 1: 2x + y = 8] y [Ecuación 2: x - y = 1].",
+                    desarrollo: `
+                        El método de suma y resta (reducción) busca eliminar una variable sumando ambas ecuaciones de forma vertical.<br><br>
+                        <strong>Paso 1:</strong> Vemos que tenemos '+y' y '-y', así que al sumar directamente se anulan.<br>
+                        (2x + x) + (y - y) = (8 + 1)<br>
+                        3x = 9<br><br>
+                        <strong>Paso 2:</strong> Despejamos 'x':<br>
+                        x = 9 / 3 = <strong>3</strong>.<br><br>
+                        <strong>Paso 3:</strong> Sustituimos x=3 en la Ecuación 2 para hallar 'y'.<br>
+                        (3) - y = 1<br>
+                        -y = 1 - 3<br>
+                        -y = -2 (multiplicamos por -1 ambos lados)<br>
+                        y = <strong>2</strong>.<br><br>
+                        <strong>Respuesta:</strong> <strong>x = 3, y = 2</strong>.
+                    `
+                },
+                {
+                    problema: "13. Ecuaciones Cuadráticas Incompletas: Resolver x² - 36 = 0.",
+                    desarrollo: `
+                        Cuando falta el término lineal (la 'x' normal), podemos resolver por simple despeje usando raíces cuadradas.<br><br>
+                        <strong>Paso 1:</strong> Pasamos el -36 al lado derecho.<br>
+                        x² = 36<br><br>
+                        <strong>Paso 2:</strong> Aplicamos raíz cuadrada a ambos lados de la igualdad.<br>
+                        x = ±√36<br><br>
+                        <strong>Paso 3:</strong> Toda raíz cuadrada genera dos resultados (uno positivo y uno negativo).<br><br>
+                        <strong>Respuesta:</strong> <strong>x₁ = 6, x₂ = -6</strong>.
+                    `
+                },
+                {
+                    problema: "14. Ecuaciones Cuadráticas por Factorización: Resolver x² - 5x + 6 = 0.",
+                    desarrollo: `
+                        Este método es más rápido que la fórmula general si el trinomio es fácil de factorizar.<br><br>
+                        <strong>Paso 1:</strong> Factorizamos buscando dos números que multiplicados den +6 y sumados den -5.<br>
+                        (x - 3)(x - 2) = 0<br><br>
+                        <strong>Paso 2:</strong> Para que una multiplicación dé cero, alguno de los paréntesis debe valer cero. Así que igualamos cada uno a cero.<br>
+                        x - 3 = 0  ---> x = 3<br>
+                        x - 2 = 0  ---> x = 2<br><br>
+                        <strong>Respuesta:</strong> Las soluciones de la ecuación son <strong>x₁ = 3, x₂ = 2</strong>.
+                    `
+                },
+                {
+                    problema: "15. Fórmula General: Resolver x² - 2x - 8 = 0.",
+                    desarrollo: `
+                        La fórmula general es: x = [ -b ± √(b² - 4ac) ] / 2a.<br><br>
+                        <strong>Paso 1:</strong> Identificamos a=1, b=-2, c=-8.<br>
+                        <strong>Paso 2:</strong> Sustituimos: x = [ -(-2) ± √((-2)² - 4(1)(-8)) ] / 2(1)<br>
+                        <strong>Paso 3:</strong> Resolvemos operaciones:<br>
+                        x = [ 2 ± √(4 + 32) ] / 2<br>
+                        x = [ 2 ± √36 ] / 2<br>
+                        x = [ 2 ± 6 ] / 2<br><br>
+                        <strong>Paso 4:</strong> Separamos el camino positivo y negativo:<br>
+                        x₁ = (2 + 6) / 2 = 8 / 2 = <strong>4</strong><br>
+                        x₂ = (2 - 6) / 2 = -4 / 2 = <strong>-2</strong><br><br>
+                        <strong>Respuesta:</strong> <strong>x₁ = 4, x₂ = -2</strong>.
+                    `
+                }
+            ],
+            computo: [
+                {
+                    problema: "1. Excel: ¿Cómo sumarías los valores del rango A1 al A10?",
+                    desarrollo: `
+                        Excel utiliza funciones predefinidas para facilitar operaciones básicas.<br><br>
+                        <strong>Paso 1:</strong> Seleccionamos la celda donde queremos el resultado.<br>
+                        <strong>Paso 2:</strong> Escribimos el signo igual (=) para iniciar cualquier fórmula.<br>
+                        <strong>Paso 3:</strong> Usamos la función SUMA y el rango deseado: <strong>=SUMA(A1:A10)</strong>.<br>
+                        <strong>Respuesta:</strong> La fórmula correcta es <strong>=SUMA(A1:A10)</strong>.
+                    `
+                },
+                {
+                    problema: "2. Excel: ¿Cómo calcular el promedio de las celdas B1 a B5?",
+                    desarrollo: `
+                        Al igual que la suma, Excel tiene una función directa para promedios.<br><br>
+                        <strong>Paso 1:</strong> Escribir el signo igual (=).<br>
+                        <strong>Paso 2:</strong> Escribir la función PROMEDIO.<br>
+                        <strong>Paso 3:</strong> Seleccionar el rango: <strong>=PROMEDIO(B1:B5)</strong>.<br>
+                        <strong>Respuesta:</strong> La fórmula es <strong>=PROMEDIO(B1:B5)</strong>.
+                    `
+                },
+                {
+                    problema: "3. Word: ¿Qué teclas presionas para convertir un texto seleccionado a negritas, cursivas y subrayado rápido?",
+                    desarrollo: `
+                        Los atajos de teclado ahorran mucho tiempo en edición.<br><br>
+                        <strong>Negrita:</strong> Ctrl + N<br>
+                        <strong>Cursiva:</strong> Ctrl + K<br>
+                        <strong>Subrayado:</strong> Ctrl + S<br>
+                        <strong>Respuesta:</strong> Usas los atajos: <strong>Ctrl + N, Ctrl + K, Ctrl + S</strong>.
+                    `
+                },
+                {
+                    problema: "4. Windows: ¿Cuál es el atajo para tomar una captura de pantalla y guardarla automáticamente?",
+                    desarrollo: `
+                        A veces necesitamos guardar evidencia de lo que vemos en pantalla rápidamente.<br><br>
+                        <strong>Paso 1:</strong> Presionar la tecla <strong>Windows + Imp Pant (PrtScn)</strong>.<br>
+                        <strong>Resultado:</strong> La pantalla parpadeará y se guardará automáticamente en la carpeta 'Capturas de pantalla' dentro de 'Imágenes'.<br>
+                        <strong>Respuesta:</strong> <strong>Windows + Imp Pant</strong>.
+                    `
+                },
+                {
+                    problema: "5. Excel: ¿Qué diferencia hay entre una referencia relativa (A1) y una absoluta ($A$1)?",
+                    desarrollo: `
+                        Es vital para copiar fórmulas sin errores.<br><br>
+                        <strong>Referencia Relativa (A1):</strong> Al copiar la fórmula a otra celda, la referencia cambia automáticamente (ej. a A2, A3).<br>
+                        <strong>Referencia Absoluta ($A$1):</strong> Al usar los signos de pesos, la celda queda 'fija' o bloqueada. No cambia aunque copies la fórmula en toda la hoja.<br>
+                        <strong>Respuesta:</strong> La absoluta ($) <strong>fija la celda</strong> para que no cambie al arrastrar la fórmula.
+                    `
+                },
+                {
+                    problema: "6. Word: ¿Cómo crear una lista numerada automáticamente?",
+                    desarrollo: `
+                        No es necesario escribir 1, 2, 3 manualmente.<br><br>
+                        <strong>Paso 1:</strong> Escribe el número 1 seguido de un punto y un espacio.<br>
+                        <strong>Paso 2:</strong> Escribe tu texto y presiona 'Enter'.<br>
+                        <strong>Resultado:</strong> Word detecta que iniciaste una lista y crea automáticamente el número 2.<br>
+                        <strong>Respuesta:</strong> Escribir <strong>1. [Espacio]</strong> y presionar Enter.
+                    `
+                },
+                {
+                    problema: "7. Hardware: Si tu computadora no enciende y emite una serie de pitidos (beeps), ¿qué significa?",
+                    desarrollo: `
+                        Los pitidos son el código de error de la BIOS (el cerebro inicial de la placa madre).<br><br>
+                        <strong>Significado:</strong> Indica un problema de hardware básico antes de cargar Windows (memoria RAM mal puesta, tarjeta de video suelta, etc.).<br>
+                        <strong>Respuesta:</strong> Es una <strong>alerta de falla de hardware detectada por la BIOS</strong>.
+                    `
+                },
+                {
+                    problema: "8. Excel: ¿Para qué sirve la función BUSCARV?",
+                    desarrollo: `
+                        Es una de las funciones más poderosas para manejar tablas de datos.<br><br>
+                        <strong>Función:</strong> Busca un valor en la primera columna de una tabla y regresa el dato que esté en la misma fila pero en otra columna indicada.<br>
+                        <strong>Estructura:</strong> =BUSCARV(valor_buscado, matriz, columna, ordenado).<br>
+                        <strong>Respuesta:</strong> Sirve para <strong>buscar datos en grandes bases de datos automáticamente</strong>.
+                    `
+                },
+                {
+                    problema: "9. Internet: ¿Qué hace el protocolo HTTPS diferente al HTTP?",
+                    desarrollo: `
+                        La 'S' al final es la diferencia clave.<br><br>
+                        <strong>HTTP:</strong> Transmite datos en texto plano (cualquiera puede interceptarlos).<br>
+                        <strong>HTTPS:</strong> Utiliza cifrado (SSL/TLS) para proteger la información.<br>
+                        <strong>Respuesta:</strong> HTTPS <strong>encripta la información</strong> para que sea segura durante la navegación.
+                    `
+                },
+                {
+                    problema: "10. Word: ¿Qué es la 'Letra Capital'?",
+                    desarrollo: `
+                        Es un elemento estético que resalta el inicio de un texto.<br><br>
+                        <strong>Definición:</strong> Es una letra inicial grande que ocupa el espacio de varias líneas de texto debajo de ella.<br>
+                        <strong>Respuesta:</strong> Es una <strong>letra inicial de párrafo con gran tamaño</strong> que abarca varias líneas.
+                    `
+                },
+                {
+                    problema: "11. Sistemas: ¿Qué hace la tecla 'F5' en casi cualquier navegador o programa?",
+                    desarrollo: `
+                        Es el comando de refresco universal.<br><br>
+                        <strong>Función:</strong> Recarga o actualiza el contenido de la página web actual o de la ventana abierta.<br>
+                        <strong>Respuesta:</strong> <strong>Actualizar o recargar</strong> el contenido.
+                    `
+                },
+                {
+                    problema: "12. Excel: ¿Qué hace la función SI?",
+                    desarrollo: `
+                        Es la función de toma de decisiones de Excel.<br><br>
+                        <strong>Lógica:</strong> =SI(prueba_lógica, valor_si_verdadero, valor_si_falso).<br>
+                        <strong>Ejemplo:</strong> =SI(A1>=6, 'Aprobado', 'Reprobado').<br>
+                        <strong>Respuesta:</strong> Permite <strong>tomar decisiones (hacer una cosa u otra)</strong> basándose en una condición.
+                    `
+                },
+                {
+                    problema: "13. Seguridad: ¿Qué es el Phishing?",
+                    desarrollo: `
+                        Es una técnica de ingeniería social muy común para robar identidades.<br><br>
+                        <strong>Método:</strong> El atacante envía correos o mensajes falsos que parecen de tu banco para que tú mismo ingreses tus claves en su sitio web falso.<br>
+                        <strong>Respuesta:</strong> <strong>Suplantación de identidad</strong> para robar datos mediante engaños.
+                    `
+                },
+                {
+                    problema: "14. Windows: ¿Qué hace el atajo 'Ctrl + Z'?",
+                    desarrollo: `
+                        Es el comando de 'salvavidas' universal.<br><br>
+                        <strong>Función:</strong> Deshace la última acción realizada (borrar un texto, mover un archivo, etc.).<br>
+                        <strong>Respuesta:</strong> <strong>Deshacer</strong> la última operación.
+                    `
+                },
+                {
+                    problema: "15. Hardware: ¿Qué es la memoria RAM y por qué es volátil?",
+                    desarrollo: `
+                        La RAM (Random Access Memory) es el área de trabajo del procesador.<br><br>
+                        <strong>¿Por qué volátil?:</strong> Porque solo guarda datos mientras hay energía eléctrica. Al apagar la computadora, todo lo que estaba en la RAM se borra instantáneamente.<br>
+                        <strong>Respuesta:</strong> Es memoria de acceso rápido y <strong>volátil porque pierde su información al apagarse</strong>.
+                    `
+                }
+            ],
+        };
+      
 
         // Lógica del sistema
         let modoActual = ''; 
@@ -1117,6 +1811,8 @@
             
             if (modo === 'estudio') {
                 subtitle.innerText = "Modo Estudio: Selecciona una materia para leer el temario";
+            } else if (modo === 'ejercicios') {
+                subtitle.innerText = "Ejercicios: Selecciona una materia para ver el paso a paso";
             } else {
                 subtitle.innerText = "Modo Simulador: Selecciona una materia para iniciar tu prueba";
             }
@@ -1176,6 +1872,11 @@
 
         function seleccionarMateria(materiaKey) {
             materiaActual = materiaKey;
+          // NUEVO: Si estamos en modo ejercicios, saltamos directo a la lista
+            if (modoActual === 'ejercicios') {
+                iniciarEjercicios(materiaKey);
+                return;
+            }
             
             menuSection.style.display = 'none';
             resultSection.style.display = 'none';
@@ -1242,6 +1943,36 @@
                     <div class="study-explanation">ℹ️ <strong>Explicación:</strong> ${preguntaObj.explicacion}</div>
                 `;
                 studyContainer.appendChild(card);
+            });
+        }
+      
+      function iniciarEjercicios(materiaKey) {
+            menuSection.style.display = 'none';
+            document.getElementById('exercises-section').style.display = 'block';
+
+            const subjectName = baseDeDatos[materiaKey].nombre;
+            document.getElementById('exercises-subject-title').innerText = `✍️ Ejercicios: ${subjectName}`;
+
+            const container = document.getElementById('exercises-content-list');
+            container.innerHTML = '';
+
+            const ejercicios = baseEjercicios[materiaKey] || [];
+
+            if(ejercicios.length === 0) {
+                container.innerHTML = '<p style="text-align:center; padding: 20px; font-size: 1.2rem;">Próximamente agregaremos ejercicios resueltos para esta materia. 🚧</p>';
+                return;
+            }
+
+            ejercicios.forEach((ej, index) => {
+                const card = document.createElement('div');
+                card.className = 'study-card';
+                card.innerHTML = `
+                    <div class="study-question" style="color: var(--primary-color);">Ejercicio ${index + 1}: ${ej.problema}</div>
+                    <div style="background-color: #f1f8e9; padding: 15px; border-radius: 5px; margin-top: 15px; border-left: 4px solid #81c784; line-height: 1.6; font-size: 1.1rem;">
+                        ${ej.desarrollo}
+                    </div>
+                `;
+                container.appendChild(card);
             });
         }
 
@@ -1429,17 +2160,26 @@
             subtitle.innerText = "¿Qué deseas hacer hoy?";
             detenerTemporizador();
             document.getElementById('config-section').style.display = 'none';
+            document.getElementById('exercises-section').style.display = 'none';
         }
 
         function volverAlMenu() {
             blockSection.style.display = 'none';
+            // NUEVA LÍNEA: Asegurarnos de ocultar la pantalla de ejercicios al regresar
+            document.getElementById('exercises-section').style.display = 'none'; 
+            
             menuSection.style.display = 'grid';
+            
+            // Actualizamos el subtítulo según el modo
             if (modoActual === 'estudio') {
                 subtitle.innerText = "Modo Estudio: Selecciona una materia para leer el temario";
+            } else if (modoActual === 'ejercicios') {
+                subtitle.innerText = "Ejercicios: Selecciona una materia para ver el paso a paso";
             } else {
                 subtitle.innerText = "Modo Simulador: Selecciona una materia para iniciar tu prueba";
             }
-          detenerTemporizador();
+            
+            detenerTemporizador();
         }
 
         function volverABloques() {
@@ -1494,6 +2234,7 @@
             const isQuizVisible = document.getElementById('quiz-section').style.display === 'block';
             const isStudyVisible = document.getElementById('study-section').style.display === 'block';
             const isResultVisible = document.getElementById('result-section').style.display === 'block';
+            const isExercisesVisible = document.getElementById('exercises-section').style.display === 'block';
 
             if (isMenuVisible) {
                 volverInicio();
