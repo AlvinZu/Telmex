@@ -1162,7 +1162,302 @@
                         V_resistencia = 9V - 0.7V = 8.3V.<br><br>
                         <strong>Respuesta:</strong> La resistencia recibirá un voltaje de <strong>8.3 Volts</strong>.
                     `
-                }
+                },
+              {
+                problema: "16. Amplificador Operacional (No Inversor): Calcule el voltaje de salida (Vout) si el voltaje de entrada es Vin = 2V, la resistencia R1 = 100 kΩ y la resistencia de retroalimentación R2 = 500 kΩ.",
+                desarrollo: `
+                    En un amplificador no inversor, la señal entra por la terminal positiva y se amplifica mediante un factor determinado por R1 y R2.<br><br>
+                    <strong>Fórmula:</strong> Vout = (1 + R2 / R1) × Vin<br><br>
+                    <strong>Paso 1:</strong> Sustituimos los valores en la fracción.<br>
+                    R2 / R1 = 500kΩ / 100kΩ = 5.<br><br>
+                    <strong>Paso 2:</strong> Sumamos el 1 de la fórmula y multiplicamos por Vin.<br>
+                    Vout = (1 + 5) × 2V = 6 × 2V.<br><br>
+                    <strong>Respuesta:</strong> El voltaje de salida será de <strong>12 V</strong>[cite: 1].
+                `
+            },
+            {
+                problema: "17. Amplificador Operacional (Inversor): Calcule el voltaje de entrada (Vin) necesario para que un OpAmp entregue a la salida Vout = 24V, sabiendo que R1 = 300 Ω y Rf = 1 kΩ.",
+                desarrollo: `
+                    Para el amplificador inversor, la señal entra por la terminal negativa, invirtiendo la fase (signo) a la salida.<br><br>
+                    <strong>Fórmula:</strong> Vout = -(Rf / R1) × Vin<br><br>
+                    <strong>Paso 1:</strong> Despejamos Vin de la ecuación.<br>
+                    Vin = -(Vout × R1) / Rf<br><br>
+                    <strong>Paso 2:</strong> Sustituimos los valores (nota: 1 kΩ = 1000 Ω).<br>
+                    Vin = -(24V × 300Ω) / 1000Ω<br><br>
+                    <strong>Paso 3:</strong> Resolvemos.<br>
+                    Vin = -7200 / 1000 = -7.2.<br><br>
+                    <strong>Respuesta:</strong> El voltaje de entrada necesario es <strong>-7.2 V</strong>[cite: 1].
+                `
+            },
+            {
+                problema: "18. Oscilador de Corrimiento de Fase (RC): Para un circuito con transistor FET, la resistencia de realimentación es R = 10 kΩ. Calcule el valor del capacitor C para que opere a una frecuencia de 1 kHz.",
+                desarrollo: `
+                    El oscilador de corrimiento de fase emplea una red de tres etapas RC para desfasar la señal.<br><br>
+                    <strong>Fórmula:</strong> f = 1 / (2π × R × C × √6)<br><br>
+                    <strong>Paso 1:</strong> Despejamos el capacitor (C).<br>
+                    C = 1 / (2π × R × f × √6)<br><br>
+                    <strong>Paso 2:</strong> Sustituimos valores (R = 10,000 Ω, f = 1,000 Hz, √6 ≈ 2.449).<br>
+                    C = 1 / (2 × 3.1416 × 10,000 × 1,000 × 2.449)<br><br>
+                    <strong>Paso 3:</strong> Multiplicamos el denominador y dividimos.<br>
+                    C = 1 / 153,874,000 = 0.0000000065 F.<br><br>
+                    <strong>Respuesta:</strong> El capacitor requerido es de <strong>6.5 nF</strong>[cite: 1].
+                `
+            },
+            {
+                problema: "19. Oscilador Colpitts: Calcule la frecuencia resonante (f) de un oscilador Colpitts que cuenta con una bobina L = 100 µH, y dos capacitores C1 = 0.005 µF y C2 = 0.01 µF.",
+                desarrollo: `
+                    El oscilador Colpitts utiliza dos capacitores en serie dentro de su tanque resonante.<br><br>
+                    <strong>Paso 1:</strong> Calculamos la capacitancia equivalente (Ceq) en serie.<br>
+                    Ceq = (C1 × C2) / (C1 + C2)<br>
+                    Ceq = (0.005µF × 0.01µF) / (0.005µF + 0.01µF) = 0.00333 µF (o 3.33 nF).<br><br>
+                    <strong>Paso 2:</strong> Utilizamos la fórmula de resonancia LC: f = 1 / (2π × √(L × Ceq)).<br>
+                    Sustituimos L = 100µH y Ceq = 3.33nF.<br>
+                    f = 1 / (2 × 3.1416 × √(100µH × 3.33nF))<br><br>
+                    <strong>Respuesta:</strong> La frecuencia resultante es <strong>275.8 kHz</strong>[cite: 1].
+                `
+            },
+            {
+                problema: "20. Oscilador Hartley: Calcule la frecuencia de oscilación si L1 = 750 µH, L2 = 750 µH, la inductancia mutua M = 150 µH y el capacitor C = 150 pF.",
+                desarrollo: `
+                    El oscilador Hartley divide la bobina en dos partes y considera la inductancia mutua.<br><br>
+                    <strong>Paso 1:</strong> Calculamos la inductancia equivalente (Leq).<br>
+                    Leq = L1 + L2 + 2M<br>
+                    Leq = 750µH + 750µH + 2(150µH) = 1800 µH (0.0018 H).<br><br>
+                    <strong>Paso 2:</strong> Aplicamos la fórmula de resonancia: f = 1 / (2π × √(Leq × C)).<br>
+                    f = 1 / (2 × 3.1416 × √(0.0018 H × 150 pF))<br><br>
+                    <strong>Respuesta:</strong> La frecuencia de oscilación es <strong>306.29 kHz</strong>[cite: 1].
+                `
+            },
+            {
+                problema: "21. Oscilador Puente de Wien: Calcule el valor del capacitor necesario para que el circuito oscile a 10 kHz, utilizando resistores en el puente de R = 100 kΩ.",
+                desarrollo: `
+                    El puente de Wien es muy estable para bajas frecuencias usando componentes idénticos en las ramas reactivas.<br><br>
+                    <strong>Fórmula:</strong> f = 1 / (2π × R × C)<br><br>
+                    <strong>Paso 1:</strong> Despejamos el capacitor (C).<br>
+                    C = 1 / (2π × f × R)<br><br>
+                    <strong>Paso 2:</strong> Sustituimos los valores.<br>
+                    C = 1 / (2 × 3.1416 × 10,000 Hz × 100,000 Ω)<br>
+                    C = 1 / 6,283,200,000<br><br>
+                    <strong>Respuesta:</strong> El capacitor debe ser de <strong>0.16 nF</strong>[cite: 1].
+                `
+            },
+            {
+                problema: "22. Conversiones de Sistemas: Realizar el cambio de base del número decimal 56 al sistema binario, octal y hexadecimal.",
+                desarrollo: `
+                    Para pasar de decimal a otra base, dividimos el número sucesivamente entre la nueva base y leemos los residuos al revés.<br><br>
+                    <strong>A Binario (Base 2):</strong><br>
+                    56 / 2 = 28 (Residuo 0)<br>
+                    28 / 2 = 14 (Residuo 0)<br>
+                    14 / 2 = 7 (Residuo 0)<br>
+                    7 / 2 = 3 (Residuo 1)<br>
+                    3 / 2 = 1 (Residuo 1)<br>
+                    Leído al revés: 111000.<br><br>
+                    <strong>A Octal (Base 8):</strong><br>
+                    56 / 8 = 7 (Residuo 0)<br>
+                    Leído al revés: 70.<br><br>
+                    <strong>A Hexadecimal (Base 16):</strong><br>
+                    56 / 16 = 3 (Residuo 8)<br>
+                    Leído al revés: 38.<br><br>
+                    <strong>Respuesta:</strong> Binario: <strong>111000</strong>, Octal: <strong>70</strong>, Hexadecimal: <strong>38</strong>[cite: 1].
+                `
+            },
+            {
+                problema: "23. Conversiones de Sistemas: Convertir el número binario 1111001 al sistema decimal, octal y hexadecimal.",
+                desarrollo: `
+                    <strong>A Decimal:</strong> Sumamos los pesos de los unos.<br>
+                    64(1) + 32(1) + 16(1) + 8(1) + 4(0) + 2(0) + 1(1) = 64+32+16+8+1 = 121.<br><br>
+                    <strong>A Octal:</strong> Agrupamos de 3 en 3 bits de derecha a izquierda.<br>
+                    [001] [111] [001] -> 1, 7, 1 -> 171.<br><br>
+                    <strong>A Hexadecimal:</strong> Agrupamos de 4 en 4 bits.<br>
+                    [0111] [1001] -> 7, 9 -> 79.<br><br>
+                    <strong>Respuesta:</strong> Decimal: <strong>121</strong>, Octal: <strong>171</strong>, Hexadecimal: <strong>79</strong>[cite: 1].
+                `
+            },
+            {
+                problema: "24. Lógica Combinacional: Determine la ecuación de salida X del siguiente circuito. Una compuerta AND recibe A y B. Una compuerta NAND recibe B y C. Ambas salidas entran a una compuerta OR.",
+                desarrollo: `
+                    Resolvemos el circuito etapa por etapa desde la entrada hacia la salida.<br><br>
+                    <strong>Paso 1:</strong> La salida de la compuerta AND (llamémosla X1) multiplica sus entradas.<br>
+                    X1 = A * B<br><br>
+                    <strong>Paso 2:</strong> La compuerta NAND multiplica sus entradas y las niega (X2).<br>
+                    X2 = NOT(B * C)<br><br>
+                    <strong>Paso 3:</strong> La compuerta OR final suma ambas señales.<br>
+                    X = X1 + X2<br><br>
+                    <strong>Respuesta:</strong> La ecuación es <strong>X = (A * B) + NOT(B * C)</strong>[cite: 1].
+                `
+            },
+            {
+                problema: "25. Lógica Combinacional: Escriba la ecuación de salida de un circuito donde una compuerta OR recibe B y C, y su resultado entra junto con A a una compuerta AND.",
+                desarrollo: `
+                    Trazamos el recorrido de las señales lógicas.<br><br>
+                    <strong>Paso 1:</strong> Evaluamos la compuerta OR inicial. La suma lógica de sus entradas es (B + C).<br><br>
+                    <strong>Paso 2:</strong> Esta señal resultante se dirige a la entrada de una compuerta AND.<br><br>
+                    <strong>Paso 3:</strong> La otra entrada de la compuerta AND es la señal A. La compuerta AND realiza un producto lógico.<br>
+                    X = A * (B + C)<br><br>
+                    <strong>Respuesta:</strong> La ecuación es <strong>X = A * (B + C)</strong>[cite: 1].
+                `
+            },
+            {
+                problema: "26. Lógica Combinacional: Determinar la ecuación de salida de un circuito donde una compuerta AND recibe A y C, y su salida entra junto con B a una compuerta OR final.",
+                desarrollo: `
+                    <strong>Paso 1:</strong> Resolvemos primero la compuerta AND que procesa las entradas A y C. El producto lógico es (A * C).<br><br>
+                    <strong>Paso 2:</strong> Esta señal se dirige a una compuerta OR (suma lógica).<br><br>
+                    <strong>Paso 3:</strong> La compuerta OR suma la señal independiente B con el resultado de la AND anterior.<br>
+                    X = B + (A * C)<br><br>
+                    <strong>Respuesta:</strong> La ecuación es <strong>X = B + AC</strong>[cite: 1].
+                `
+            },
+            {
+                problema: "27. Parámetros del Transistor BJT: En un circuito, se mide una corriente de emisor (Ie) de 10 mA y una corriente de colector (Ic) de 9.8 mA. Calcule la relación alfa (α).",
+                desarrollo: `
+                    La relación alfa (α) es una medida de la eficiencia del transistor, representando qué tanta de la corriente que entra por el emisor logra cruzar hasta el colector.<br><br>
+                    <strong>Fórmula:</strong> α = Ic / Ie<br><br>
+                    <strong>Paso 1:</strong> Sustituimos los valores conocidos.<br>
+                    α = 9.8 mA / 10 mA<br><br>
+                    <strong>Paso 2:</strong> Realizamos la división.<br>
+                    α = 0.98<br><br>
+                    <strong>Respuesta:</strong> La relación alfa es <strong>0.98</strong>[cite: 1].
+                `
+            },
+            {
+                problema: "28. Parámetros del Transistor BJT: Determine la ganancia de corriente beta (β) de un transistor si su corriente de colector es de 50 mA y su corriente de base es de 0.5 mA.",
+                desarrollo: `
+                    La relación beta (β) o hFE define la capacidad de amplificación del transistor; es decir, cuántas veces multiplica la pequeña corriente de la base para generar la corriente del colector.<br><br>
+                    <strong>Fórmula:</strong> β = Ic / Ib<br><br>
+                    <strong>Paso 1:</strong> Sustituimos los valores.<br>
+                    β = 50 mA / 0.5 mA<br><br>
+                    <strong>Paso 2:</strong> Resolvemos la división.<br>
+                    β = 100<br><br>
+                    <strong>Respuesta:</strong> La ganancia beta es <strong>100</strong>[cite: 1].
+                `
+            },
+            {
+                problema: "29. Corrientes en el Transistor: Si la corriente de base (Ib) de un transistor NPN es de 20 µA y su corriente de colector (Ic) es de 2 mA, ¿cuál es el valor de la corriente de emisor (Ie)?",
+                desarrollo: `
+                    De acuerdo con las leyes de Kirchhoff aplicadas al transistor BJT, el emisor concentra la suma de las corrientes que ingresan por las otras dos terminales.<br><br>
+                    <strong>Fórmula:</strong> Ie = Ib + Ic<br><br>
+                    <strong>Paso 1:</strong> Homologamos las unidades. Convertimos 20 µA a mA (dividiendo entre 1000).<br>
+                    Ib = 0.02 mA.<br><br>
+                    <strong>Paso 2:</strong> Sumamos las corrientes.<br>
+                    Ie = 0.02 mA + 2 mA = 2.02 mA.<br><br>
+                    <strong>Respuesta:</strong> La corriente de emisor es <strong>2.02 mA</strong>[cite: 1].
+                `
+            },
+            {
+                problema: "30. Amplificadores JFET: En una configuración de fuente común, el transistor FET presenta una transconductancia gm = 2 mS (milisiemens) y una resistencia de drenaje rd = 10 kΩ. Calcule la ganancia de voltaje (Av).",
+                desarrollo: `
+                    Para un JFET en la configuración de fuente común (la más utilizada para amplificación de voltaje), la ganancia está dictada por su transconductancia y la resistencia de carga en el drenaje.<br><br>
+                    <strong>Fórmula:</strong> Av = gm × rd<br><br>
+                    <strong>Paso 1:</strong> Convertimos los valores a unidades base.<br>
+                    gm = 0.002 S.<br>
+                    rd = 10,000 Ω.<br><br>
+                    <strong>Paso 2:</strong> Multiplicamos.<br>
+                    Av = 0.002 × 10,000 = 20.<br><br>
+                    <strong>Respuesta:</strong> La ganancia de voltaje es <strong>20</strong>[cite: 1].
+                `
+            },
+            {
+                problema: "31. Amplificador Sumador Inversor: Calcule el voltaje de salida si se aplican dos voltajes: V1=1V a través de R1=1kΩ, y V2=2V a través de R2=2kΩ. La resistencia de retroalimentación Rf es de 1kΩ.",
+                desarrollo: `
+                    El circuito sumador mezcla ambas señales ponderadas por el valor de su respectiva resistencia de entrada y las invierte al pasar por la terminal negativa.<br><br>
+                    <strong>Fórmula:</strong> Vout = -Rf × [ (V1/R1) + (V2/R2) ]<br><br>
+                    <strong>Paso 1:</strong> Resolvemos los cocientes interiores.<br>
+                    V1/R1 = 1 / 1000 = 0.001.<br>
+                    V2/R2 = 2 / 2000 = 0.001.<br><br>
+                    <strong>Paso 2:</strong> Sumamos y multiplicamos por -Rf (-1000).<br>
+                    Vout = -1000 × [ 0.001 + 0.001 ] = -1000 × 0.002.<br><br>
+                    <strong>Respuesta:</strong> El voltaje resultante será <strong>-2 V</strong>[cite: 1].
+                `
+            },
+            {
+                problema: "32. Seguidor de Voltaje (Buffer): En un arreglo construido con un Amplificador Operacional como seguidor de voltaje, ¿cuál será el voltaje de salida (Vout) si la señal de entrada (Vin) proviene de un sensor que emite 5V?",
+                desarrollo: `
+                    En un seguidor de voltaje, la salida se retroalimenta directamente al 100% (cortocircuito) hacia la terminal inversora, y la señal se inyecta por la no inversora (+).<br><br>
+                    <strong>Análisis:</strong> Esta configuración tiene una ganancia estrictamente unitaria (Av = 1), y se usa para aislar etapas (alta impedancia de entrada, baja de salida) sin alterar el voltaje.<br><br>
+                    <strong>Fórmula:</strong> Vout = Vin<br><br>
+                    <strong>Respuesta:</strong> El voltaje de salida será de <strong>5 V</strong>, en fase y magnitud[cite: 1].
+                `
+            },
+            {
+                problema: "33. Diodo Zener: Un circuito contiene un Diodo Zener especificado con Vz = 5.1V. Está conectado en inversa en serie con una resistencia limitadora. Si la fuente de alimentación del circuito es de 12V, ¿qué caída de tensión soportará la resistencia?",
+                desarrollo: `
+                    El diodo Zener polarizado en inversa tiene la función de "fijar" y mantener un voltaje constante equivalente a su Vz en paralelo a la carga.<br><br>
+                    <strong>Análisis:</strong> Por la Ley de Voltajes de Kirchhoff, el voltaje total de la fuente se reparte entre la resistencia serie y el diodo.<br><br>
+                    <strong>Fórmula:</strong> V_resistencia = V_fuente - Vz<br>
+                    <strong>Paso 1:</strong> Sustituimos.<br>
+                    V_resistencia = 12V - 5.1V = 6.9V.<br><br>
+                    <strong>Respuesta:</strong> La resistencia tendrá una caída de tensión de <strong>6.9 V</strong>[cite: 1].
+                `
+            },
+            {
+                problema: "34. Desfase de Señal: Analizando la ecuación del Amplificador Inversor (Vout = -(Rf/R1)*Vin), explique qué significa fácticamente el signo negativo en los resultados.",
+                desarrollo: `
+                    Cuando aplicamos una señal de CA a la terminal inversora (-) de un Amplificador Operacional, la circuitería interna amplifica la señal pero en sentido contrario.<br><br>
+                    <strong>Paso 1:</strong> Si la onda de entrada sube (semiciclo positivo), el signo negativo indica que la onda de salida bajará (semiciclo negativo).<br><br>
+                    <strong>Paso 2:</strong> Este efecto se traduce en un corrimiento del ángulo de la onda original.<br><br>
+                    <strong>Respuesta:</strong> El signo negativo indica que la salida está <strong>desfasada 180°</strong> con respecto a la entrada (polaridad opuesta)[cite: 1].
+                `
+            },
+            {
+                problema: "35. Amplificador Diferencial (Rechazo en modo común): Si a un amplificador diferencial en lazo abierto se le inyecta un voltaje Vin1 = 3V y un voltaje Vin2 = 3V, ¿cuál será teóricamente su salida Vout?",
+                desarrollo: `
+                    El objetivo de un amplificador diferencial es amplificar exclusivamente la diferencia de potencial que existe entre sus dos entradas, ignorando (rechazando) cualquier voltaje idéntico (ruido común).<br><br>
+                    <strong>Fórmula:</strong> Vout = A × (Vin1 - Vin2)<br><br>
+                    <strong>Paso 1:</strong> Restamos los voltajes de entrada.<br>
+                    3V - 3V = 0V.<br><br>
+                    <strong>Paso 2:</strong> Multiplicamos por la ganancia (A).<br>
+                    A × 0V = 0V.<br><br>
+                    <strong>Respuesta:</strong> El voltaje de salida será de <strong>0 V</strong>[cite: 1].
+                `
+            },
+            {
+                problema: "36. Circuitos Analógicos Integradores: Identifique conceptualmente la estructura pasiva de un Amplificador Operacional Integrador.",
+                desarrollo: `
+                    El integrador realiza la función matemática de integración en el tiempo sobre la señal de entrada, acumulando carga.<br><br>
+                    <strong>Análisis:</strong> A diferencia de un amplificador normal que usa solo resistencias, el integrador utiliza un capacitor que se va cargando gradualmente.<br><br>
+                    <strong>Estructura:</strong> Para lograr esto, la resistencia (R) se conecta en serie con el voltaje de entrada (Vin), y el elemento clave, el <strong>capacitor (C)</strong>, se coloca exclusivamente en el <strong>lazo de retroalimentación</strong> (entre la salida y la terminal inversora)[cite: 1].
+                `
+            },
+            {
+                problema: "37. Circuitos Analógicos Derivadores: Identifique conceptualmente la estructura de un Amplificador Operacional Derivador y compárela con el Integrador.",
+                desarrollo: `
+                    El circuito derivador hace lo opuesto matemáticamente; resalta los cambios rápidos en la señal de entrada, como convertir ondas triangulares en cuadradas.<br><br>
+                    <strong>Análisis:</strong> La configuración es exactamente la inversa a la del integrador en cuanto a la posición de sus componentes pasivos.<br><br>
+                    <strong>Estructura:</strong> El <strong>capacitor (C)</strong> se conecta en serie directamente en la línea de entrada (bloqueando la DC), mientras que la <strong>resistencia (R)</strong> se coloca en el lazo de retroalimentación hacia la terminal negativa[cite: 1].
+                `
+            },
+            {
+                problema: "38. Compuertas Lógicas (NOR): Determine la salida (X) de una compuerta NOR si se le aplican dos señales lógicas bajas (A=0 y B=0).",
+                desarrollo: `
+                    La compuerta NOR (No-O) es el resultado físico de conectar una compuerta OR seguida de un inversor (NOT).<br><br>
+                    <strong>Ecuación:</strong> X = NOT(A + B)<br><br>
+                    <strong>Paso 1:</strong> Evaluamos la etapa de suma (OR).<br>
+                    0 + 0 = 0.<br><br>
+                    <strong>Paso 2:</strong> Negamos el resultado de la suma.<br>
+                    NOT(0) = 1.<br><br>
+                    <strong>Respuesta:</strong> La salida X será <strong>1 (Nivel Alto)</strong>[cite: 1].
+                `
+            },
+            {
+                problema: "39. Compuertas Lógicas (NAND): Establezca la ecuación booleana que define el comportamiento general de una compuerta NAND.",
+                desarrollo: `
+                    Al igual que la NOR, la NAND es una compuerta compuesta. Significa NOT-AND, por lo que toma el producto lógico convencional de la compuerta AND y lo invierte al final del proceso.<br><br>
+                    <strong>Análisis:</strong> El producto de A y B se denota como (A * B) o simplemente AB. La negación total se denota con una barra superior o la palabra NOT.<br><br>
+                    <strong>Respuesta:</strong> La ecuación representativa es <strong>X = NOT(A * B)</strong>, también escrita frecuentemente como X = (A·B)'[cite: 1].
+                `
+            },
+            {
+                problema: "40. Compuertas Lógicas (AND): Analizando la tabla de verdad para una compuerta AND de dos entradas, determine en qué única condición el dispositivo entregará un valor lógico de 1 a la salida.",
+                desarrollo: `
+                    La compuerta AND actúa como un multiplicador binario estricto (X = A * B). Para que una multiplicación no dé como resultado cero, ninguno de sus factores puede ser cero.<br><br>
+                    <strong>Evaluación de casos:</strong><br>
+                    - 0 * 0 = 0<br>
+                    - 0 * 1 = 0<br>
+                    - 1 * 0 = 0<br>
+                    - 1 * 1 = 1<br><br>
+                    <strong>Respuesta:</strong> La salida será 1 <strong>únicamente cuando ambas entradas (A y B) se encuentren en nivel alto (1)</strong>[cite: 1].
+                `
+            }
             ],
             electricidad: [
                 {
@@ -1321,7 +1616,260 @@
                         0.02 Ohms/m × 250 metros = 5 Ohms.<br><br>
                         <strong>Respuesta:</strong> 250 metros de cable tendrán una resistencia de <strong>5 Ohms</strong>.
                     `
-                }
+                },
+              {
+                problema: "16. Operaciones con Notación Científica (Multiplicación): Resolver (2 x 10²) * (5 x 10⁻⁶).",
+                desarrollo: `
+                    Si se multiplican cantidades con notación científica se suman los exponentes y aparte se multiplican las cantidades.<br><br>
+                    <strong>Paso 1:</strong> Multiplicamos los coeficientes: (2) * (5) = 10.<br>
+                    <strong>Paso 2:</strong> Sumamos los exponentes: 2 + (-6) = -4.<br>
+                    <strong>Paso 3:</strong> Unimos el resultado: 10 x 10⁻⁴.<br><br>
+                    <strong>Respuesta:</strong> <strong>10 x 10⁻⁴</strong> (que equivale a 1 x 10⁻³)[cite: 4].
+                `
+            },
+            {
+                problema: "17. Operaciones con Notación Científica (División): Resolver (16 x 10⁸) / (3 x 10⁹).",
+                desarrollo: `
+                    Si se dividen cantidades con notación científica se restan los exponentes y aparte se realiza la división de las cantidades.<br><br>
+                    <strong>Paso 1:</strong> Dividimos coeficientes: 16 / 3 = 5.33.<br>
+                    <strong>Paso 2:</strong> Restamos los exponentes (numerador menos denominador): 8 - 9 = -1.<br><br>
+                    <strong>Respuesta:</strong> <strong>5.33 x 10⁻¹</strong>[cite: 4].
+                `
+            },
+            {
+                problema: "18. Ley de Coulomb: Dos cargas, q1 = -16 μC y q2 = +18 μC, se colocan a 60 mm de distancia en el aire. ¿Cuál es la magnitud de la fuerza eléctrica y su tipo?",
+                desarrollo: `
+                    La ley de Coulomb establece la fuerza de atracción o repulsión entre cargas: F = k |q1||q2| / r².<br><br>
+                    <strong>Paso 1:</strong> Convertir a unidades base: q1=16x10⁻⁶ C, q2=18x10⁻⁶ C, r=60x10⁻³ m, constante k=9x10⁹ Nm²/C².<br>
+                    <strong>Paso 2:</strong> Sustituimos: F = (9x10⁹)(16x10⁻⁶)(18x10⁻⁶) / (60x10⁻³)².<br>
+                    <strong>Paso 3:</strong> Multiplicamos el numerador: (9)(16)(18) x 10⁹⁻⁶⁻⁶ = 2592 x 10⁻³.<br>
+                    <strong>Paso 4:</strong> Elevamos el denominador: (60)² x (10⁻³)² = 3600 x 10⁻⁶.<br>
+                    <strong>Paso 5:</strong> Dividimos: (2592/3600) x 10⁻³⁻⁽⁻⁶⁾ = 0.72 x 10³ = 720.<br><br>
+                    <strong>Respuesta:</strong> La fuerza es de <strong>720 N</strong>. Como son signos opuestos, es fuerza de <strong>atracción</strong>[cite: 4].
+                `
+            },
+            {
+                problema: "19. Corriente Eléctrica (Flujo de Carga): ¿Cuántos electrones fluyen en 30 minutos por un circuito donde circula una corriente de 150 mA?",
+                desarrollo: `
+                    La corriente eléctrica es la tasa de flujo de carga: I = q / t.<br><br>
+                    <strong>Paso 1:</strong> Convertimos el tiempo a segundos: 30 min = 1,800 s.<br>
+                    <strong>Paso 2:</strong> Despejamos y calculamos la carga (q): q = I * t = (0.150 A)(1800 s) = 270 C.<br>
+                    <strong>Paso 3:</strong> Sabiendo que 1 C = 6.24 x 10¹⁸ electrones, multiplicamos: 270 * 6.24 x 10¹⁸.<br><br>
+                    <strong>Respuesta:</strong> Fluyen <strong>1.6848 x 10²¹ electrones</strong>[cite: 4].
+                `
+            },
+            {
+                problema: "20. Resistividad: Calcule la resistencia de un cable de aluminio de 200 m de longitud con un diámetro de 40 mm (Sabiendo que la resistividad ρ del aluminio = 2.8 x 10⁻⁸ Ω·m).",
+                desarrollo: `
+                    Se usa la fórmula de la resistencia en función de su material y geometría: R = ρL / A.<br><br>
+                    <strong>Paso 1:</strong> Calculamos el área transversal (A = πr²). Si el diámetro es 40mm, r = 20mm (0.02m).<br>
+                    A = 3.1416 * (0.02)² = 1.2566 x 10⁻³ m².<br>
+                    <strong>Paso 2:</strong> Sustituimos en la fórmula general: R = (2.8 x 10⁻⁸ * 200) / 1.2566 x 10⁻³.<br><br>
+                    <strong>Respuesta:</strong> La resistencia es de <strong>4.4565 x 10⁻³ Ω</strong> (o 4.45 mΩ)[cite: 4].
+                `
+            },
+            {
+                problema: "21. Resistividad (Despeje de Longitud): Si queremos obtener una resistencia exacta de 4.4565 mΩ utilizando un cable de nicromo (ρ = 100 x 10⁻⁸ Ω·m) con la misma área transversal de 1.2566 x 10⁻³ m², ¿cuál debe ser su longitud (L)?",
+                desarrollo: `
+                    Despejamos la longitud de la fórmula de resistividad: R = ρL / A.<br><br>
+                    <strong>Paso 1:</strong> El despeje resulta en L = (R * A) / ρ.<br>
+                    <strong>Paso 2:</strong> Sustituimos los datos: L = (4.4565 x 10⁻³ * 1.2566 x 10⁻³) / (100 x 10⁻⁸).<br>
+                    <strong>Paso 3:</strong> Operamos: L = (5.6 x 10⁻⁶) / (1 x 10⁻⁶).<br><br>
+                    <strong>Respuesta:</strong> La longitud del cable debe ser de <strong>5.6 m</strong>[cite: 4].
+                `
+            },
+            {
+                problema: "22. Ley de Ohm: Calcule la corriente total si una resistencia equivalente de 38 Ω se conecta a una batería de 12 V.",
+                desarrollo: `
+                    La Ley de Ohm dicta que el voltaje es igual a la corriente multiplicada por la resistencia (V = I * R).<br><br>
+                    <strong>Paso 1:</strong> Despejamos la corriente (I): I = V / R.<br>
+                    <strong>Paso 2:</strong> Sustituimos valores: I = 12 V / 38 Ω.<br>
+                    <strong>Paso 3:</strong> Resolvemos la división: 0.31578 A.<br><br>
+                    <strong>Respuesta:</strong> La corriente fluyendo es de <strong>315.78 mA</strong>[cite: 4].
+                `
+            },
+            {
+                problema: "23. Potencia Eléctrica: Calcule la potencia disipada en el circuito anterior donde el voltaje total es de 12 V y la corriente es de 0.31578 A.",
+                desarrollo: `
+                    La potencia eléctrica representa la tasa a la cual la energía se convierte en el circuito, y se calcula con P = I * V.<br><br>
+                    <strong>Paso 1:</strong> Sustituimos los valores directamente.<br>
+                    P = (0.31578 A) * (12 V).<br>
+                    <strong>Paso 2:</strong> Multiplicamos.<br><br>
+                    <strong>Respuesta:</strong> La potencia disipada es de <strong>3.7894 W</strong>[cite: 4].
+                `
+            },
+            {
+                problema: "24. Circuito en Serie (Resistencia Total): Determine la resistencia equivalente (RT) de un circuito que contiene tres resistencias conectadas en serie: R1 = 16 Ω, R2 = 12 Ω y R3 = 10 Ω.",
+                desarrollo: `
+                    En un circuito en serie, la resistencia total equivalente se obtiene mediante la suma lineal de las resistencias individuales.<br><br>
+                    <strong>Fórmula:</strong> RT = R1 + R2 + R3<br>
+                    <strong>Paso 1:</strong> Sumamos directamente: RT = 16 + 12 + 10.<br><br>
+                    <strong>Respuesta:</strong> La resistencia total es de <strong>38 Ω</strong>[cite: 4].
+                `
+            },
+            {
+                problema: "25. Circuito en Serie (Caída de Tensión): En el circuito anterior (con corriente total IT = 315.78 mA), calcule la caída de tensión exclusiva en la resistencia R1 de 16 Ω.",
+                desarrollo: `
+                    En una configuración en serie, la corriente eléctrica se mantiene constante a través de todos los componentes. Usamos la Ley de Ohm para el componente individual.<br><br>
+                    <strong>Fórmula:</strong> V1 = I * R1<br>
+                    <strong>Paso 1:</strong> Convertimos la corriente a Amperes: 0.31578 A.<br>
+                    <strong>Paso 2:</strong> Multiplicamos: V1 = 0.31578 A * 16 Ω = 5.0525 V.<br><br>
+                    <strong>Respuesta:</strong> La caída de tensión en R1 es de <strong>5.0525 V</strong>[cite: 4].
+                `
+            },
+            {
+                problema: "26. Circuito en Paralelo (Resistencia Total): Determine la resistencia total equivalente (RT) de un circuito con tres resistencias en paralelo: R1 = 16 Ω, R2 = 12 Ω y R3 = 10 Ω.",
+                desarrollo: `
+                    Para un arreglo de resistencias en paralelo, usamos la suma de sus valores inversos.<br><br>
+                    <strong>Fórmula:</strong> 1/RT = 1/R1 + 1/R2 + 1/R3<br>
+                    <strong>Paso 1:</strong> Sustituimos: 1/RT = 1/16 + 1/12 + 1/10.<br>
+                    <strong>Paso 2:</strong> Encontramos el común denominador (240): 15/240 + 20/240 + 24/240 = 59/240.<br>
+                    <strong>Paso 3:</strong> Invertimos la fracción final para obtener RT: RT = 240 / 59.<br><br>
+                    <strong>Respuesta:</strong> La resistencia equivalente es <strong>4.0678 Ω</strong>[cite: 4].
+                `
+            },
+            {
+                problema: "27. Circuito en Paralelo (Potencia Individual): Si el circuito anterior en paralelo está alimentado por una batería de 12V, calcule la potencia disipada específicamente por R2 (12 Ω).",
+                desarrollo: `
+                    En un circuito en paralelo, el voltaje o caída de potencial se mantiene constante en cada rama. Usamos la variante de la fórmula de potencia: P = V² / R.<br><br>
+                    <strong>Fórmula:</strong> P2 = V² / R2<br>
+                    <strong>Paso 1:</strong> Elevamos el voltaje: (12)² = 144.<br>
+                    <strong>Paso 2:</strong> Dividimos entre el valor de R2: 144 / 12 = 12.<br><br>
+                    <strong>Respuesta:</strong> La potencia disipada por la resistencia R2 es de <strong>12 W</strong>[cite: 4].
+                `
+            },
+            {
+                problema: "28. Batería Real (Resistencia Interna): Una batería con fuerza electromotriz (ε) de 12V y resistencia interna (r) de 0.5 Ω se conecta a una carga con resistencia equivalente (RT) de 5.5 Ω. Calcule la corriente del circuito.",
+                desarrollo: `
+                    La corriente fluyendo se calcula sumando en serie la resistencia externa más la resistencia interna de la propia fuente.<br><br>
+                    <strong>Fórmula:</strong> I = ε / (RT + r)<br>
+                    <strong>Paso 1:</strong> Sustituimos y sumamos las resistencias: I = 12 / (5.5 + 0.5).<br>
+                    <strong>Paso 2:</strong> Dividimos: I = 12 / 6.<br><br>
+                    <strong>Respuesta:</strong> La corriente del circuito es de <strong>2 A</strong>[cite: 4].
+                `
+            },
+            {
+                problema: "29. Batería Real (Voltaje en Terminales): Utilizando los datos del circuito anterior (I = 2A, ε = 12V, r = 0.5 Ω), calcule el voltaje real en las terminales hacia afuera de la batería (VT).",
+                desarrollo: `
+                    El voltaje real o útil disponible en las terminales se obtiene restando la caída de tensión interna (debida a 'r') de la fem ideal.<br><br>
+                    <strong>Fórmula:</strong> VT = ε - I*r<br>
+                    <strong>Paso 1:</strong> Calculamos la caída interna: 2 A * 0.5 Ω = 1 V.<br>
+                    <strong>Paso 2:</strong> Restamos: VT = 12 V - 1 V.<br><br>
+                    <strong>Respuesta:</strong> El voltaje en terminales será <strong>11 V</strong>[cite: 4].
+                `
+            },
+            {
+                problema: "30. Capacitancia Básica: Calcule la capacitancia (C) de un dispositivo si almacena una carga de 261.84 μC cuando se le aplica una diferencia de potencial de 24 V.",
+                desarrollo: `
+                    La capacitancia básica se define como la razón de la magnitud de la carga a la diferencia de potencial resultante.<br><br>
+                    <strong>Fórmula:</strong> C = Q / V<br>
+                    <strong>Paso 1:</strong> Sustituimos: C = 261.84 x 10⁻⁶ C / 24 V.<br>
+                    <strong>Paso 2:</strong> Dividimos obteniendo 10.91 x 10⁻⁶ F.<br><br>
+                    <strong>Respuesta:</strong> La capacitancia es de <strong>10.91 μF</strong>[cite: 4].
+                `
+            },
+            {
+                problema: "31. Capacitancia por Geometría (Aire/Vacío): Calcule la capacitancia de un capacitor de placas paralelas separadas por aire (K=1), con área superficial A = 45 cm² y distancia d = 8 mm.",
+                desarrollo: `
+                    Utilizamos la fórmula geométrica: C = K * ε0 * A / d.<br><br>
+                    <strong>Paso 1:</strong> Transformamos a unidades base: A = 45x10⁻⁴ m², d = 8x10⁻³ m, permitividad ε0 = 8.85x10⁻¹² F/m.<br>
+                    <strong>Paso 2:</strong> Sustituimos: C = (1)(8.85x10⁻¹²)(45x10⁻⁴) / (8x10⁻³).<br>
+                    <strong>Paso 3:</strong> Operamos el numerador: 3982.5x10⁻¹⁶. Al dividir entre 8x10⁻³ resulta 497.8x10⁻¹³ F.<br><br>
+                    <strong>Respuesta:</strong> La capacitancia del arreglo es <strong>4.98 pF</strong> (pico Faradios)[cite: 4].
+                `
+            },
+            {
+                problema: "32. Constante Dieléctrica: Utilizando el condensador de placas paralelas anterior, ¿cuál será su nueva capacitancia si entre las placas se sustituye el aire por Mica (K = 5)?",
+                desarrollo: `
+                    El material dieléctrico multiplica la capacitancia original de vacío/aire por su constante relativa (K).<br><br>
+                    <strong>Fórmula:</strong> C_nueva = C_aire * K<br>
+                    <strong>Paso 1:</strong> Multiplicamos el valor anterior por 5.<br>
+                    C_mica = 4.98 pF * 5.<br><br>
+                    <strong>Respuesta:</strong> La capacitancia utilizando mica será de <strong>24.9 pF</strong>[cite: 4].
+                `
+            },
+            {
+                problema: "33. Capacitores en Serie: Calcule la Capacitancia Total (CT) de un circuito que cuenta con tres capacitores conectados en serie: C1 = 20 μF, C2 = 40 μF y C3 = 60 μF.",
+                desarrollo: `
+                    Atención: la capacitancia en serie se calcula sumando sus inversos (el método análogo al de las resistencias en paralelo).<br><br>
+                    <strong>Fórmula:</strong> 1/CT = 1/C1 + 1/C2 + 1/C3<br>
+                    <strong>Paso 1:</strong> 1/CT = 1/20 + 1/40 + 1/60.<br>
+                    <strong>Paso 2:</strong> Obtenemos común denominador (120): 6/120 + 3/120 + 2/120 = 11/120.<br>
+                    <strong>Paso 3:</strong> Invertimos para hallar CT: CT = 120 / 11 = 10.909.<br><br>
+                    <strong>Respuesta:</strong> La capacitancia total es <strong>10.91 μF</strong>[cite: 4].
+                `
+            },
+            {
+                problema: "34. Capacitores en Paralelo: Utilizando los mismos tres componentes (20 μF, 40 μF y 60 μF), calcule la Capacitancia Total (CT) si ahora se conectan en paralelo.",
+                desarrollo: `
+                    Para un circuito de capacitores en paralelo, las capacitancias individuales se suman directamente.<br><br>
+                    <strong>Fórmula:</strong> CT = C1 + C2 + C3<br>
+                    <strong>Paso 1:</strong> Sumamos: CT = 20 + 40 + 60.<br><br>
+                    <strong>Respuesta:</strong> La capacitancia total será de <strong>120 μF</strong>[cite: 4].
+                `
+            },
+            {
+                problema: "35. Reactancia Inductiva en CA: Una bobina presenta una inductancia L = 250 mH. Calcule su Reactancia Inductiva (XL) al conectarse a una red de Corriente Alterna de 50 Hz.",
+                desarrollo: `
+                    La reactancia inductiva indica la oposición no resistiva de la bobina al flujo de CA, y es proporcional a la frecuencia.<br><br>
+                    <strong>Fórmula:</strong> XL = 2π * f * L<br>
+                    <strong>Paso 1:</strong> Convertimos L a Henrios: 250 mH = 0.250 H.<br>
+                    <strong>Paso 2:</strong> Sustituimos en la ecuación: XL = 2 * (3.1416) * 50 * 0.250.<br>
+                    <strong>Paso 3:</strong> Multiplicamos: XL = 314.16 * 0.250.<br><br>
+                    <strong>Respuesta:</strong> La reactancia inductiva es de <strong>78.54 Ω</strong>[cite: 4].
+                `
+            },
+            {
+                problema: "36. Reactancia Capacitiva en CA: Un condensador tiene una capacidad C = 20 μF. Determine su Reactancia Capacitiva (XC) operando en una línea a 50 Hz.",
+                desarrollo: `
+                    La reactancia capacitiva determina la oposición del capacitor a la CA, siendo inversamente proporcional a la frecuencia.<br><br>
+                    <strong>Fórmula:</strong> XC = 1 / (2π * f * C)<br>
+                    <strong>Paso 1:</strong> Convertimos a Faradios: 20x10⁻⁶ F.<br>
+                    <strong>Paso 2:</strong> Sustituimos: XC = 1 / (2 * 3.1416 * 50 * 20x10⁻⁶).<br>
+                    <strong>Paso 3:</strong> Resolvemos el denominador (0.006283) y dividimos: 1 / 0.006283.<br><br>
+                    <strong>Respuesta:</strong> La reactancia capacitiva resultante es <strong>159.15 Ω</strong>[cite: 4].
+                `
+            },
+            {
+                problema: "37. Impedancia en Circuito RLC (Serie): Un circuito RLC en serie posee una Resistencia R = 90 Ω, XL = 78.54 Ω y XC = 159.15 Ω. Calcule la Impedancia Total (Z).",
+                desarrollo: `
+                    Primero hallamos la reactancia neta (X) y luego calculamos la impedancia Z usando una suma vectorial (teorema de Pitágoras).<br><br>
+                    <strong>Paso 1:</strong> Calculamos la reactancia total X = XL - XC = 78.54 - 159.15 = -80.61 Ω.<br>
+                    <strong>Paso 2:</strong> Z = √(R² + X²) = √((90)² + (-80.61)²).<br>
+                    <strong>Paso 3:</strong> Z = √(8100 + 6497.97) = √14597.97.<br><br>
+                    <strong>Respuesta:</strong> La Impedancia Total (Z) es de <strong>120.82 Ω</strong>[cite: 4].
+                `
+            },
+            {
+                problema: "38. Ley de Ohm para AC (Corriente Efectiva): Sabiendo que el voltaje efectivo de la fuente es Vef = 90 V y la impedancia Z = 120.82 Ω, calcule la Corriente Efectiva (Ief) del sistema.",
+                desarrollo: `
+                    La ley de Ohm generalizada para circuitos de corriente alterna sustituye la resistencia pura (R) por la impedancia total (Z).<br><br>
+                    <strong>Fórmula:</strong> Ief = Vef / Z<br>
+                    <strong>Paso 1:</strong> Sustituimos valores: Ief = 90 V / 120.82 Ω.<br>
+                    <strong>Paso 2:</strong> Realizamos la división.<br><br>
+                    <strong>Respuesta:</strong> La corriente efectiva es <strong>0.7449 A</strong> (o aproximadamente 745 mA)[cite: 4].
+                `
+            },
+            {
+                problema: "39. Factor de Potencia (Circuito RLC): Con R = 90 Ω y Z = 120.82 Ω, determine el Factor de Potencia (cos φ) del circuito analizado.",
+                desarrollo: `
+                    El factor potencia evalúa la eficiencia eléctrica, y se puede hallar dividiendo la parte resistiva real (R) entre la impedancia aparente (Z).<br><br>
+                    <strong>Fórmula:</strong> cos(φ) = R / Z<br>
+                    <strong>Paso 1:</strong> Sustituimos en el cociente: cos(φ) = 90 / 120.82.<br>
+                    <strong>Paso 2:</strong> Realizamos la división.<br><br>
+                    <strong>Respuesta:</strong> El Factor de Potencia es <strong>0.7449</strong>[cite: 4].
+                `
+            },
+            {
+                problema: "40. Ángulo de Fase (Diagrama Fasorial): Teniendo la reactancia neta X = -80.61 Ω y la resistencia R = 90 Ω, determine el ángulo de desfase (φ).",
+                desarrollo: `
+                    Para encontrar los grados exactos de corrimiento entre voltaje y corriente, usamos la función arco tangente (tangente inversa) del cociente entre la reactancia total y la resistencia.<br><br>
+                    <strong>Fórmula:</strong> φ = tan⁻¹(X / R)<br>
+                    <strong>Paso 1:</strong> Evaluamos la fracción interior: -80.61 / 90 = -0.8956.<br>
+                    <strong>Paso 2:</strong> Aplicamos arco tangente: φ = tan⁻¹(-0.8956).<br><br>
+                    <strong>Respuesta:</strong> El ángulo de fase es <strong>-41.85°</strong> (indicando que la capacitancia domina y el voltaje se atrasa)[cite: 4].
+                `
+            }
             ],
             algebra: [
                 {
@@ -1513,7 +2061,316 @@
                         x₂ = (2 - 6) / 2 = -4 / 2 = <strong>-2</strong><br><br>
                         <strong>Respuesta:</strong> <strong>x₁ = 4, x₂ = -2</strong>.
                     `
-                }
+                },
+              {
+                problema: "16. Suma de Polinomios: Sumar los polinomios (5x² + 3x³ - 4x² + x) y (3x³ + x² + x).",
+                desarrollo: `
+                    Para sumar polinomios, simplemente agrupamos y sumamos los términos semejantes (los que tienen la misma variable elevada al mismo exponente).<br><br>
+                    <strong>Paso 1:</strong> Reducimos el primer polinomio:<br>
+                    (3x³ + 5x² - 4x² + x) = 3x³ + x² + x<br><br>
+                    <strong>Paso 2:</strong> Ahora sumamos este resultado con el segundo polinomio:<br>
+                    (3x³ + x² + x) + (3x³ + x² + x)<br><br>
+                    <strong>Paso 3:</strong> Sumamos términos semejantes:<br>
+                    (3x³ + 3x³) + (x² + x²) + (x + x)<br><br>
+                    <strong>Respuesta:</strong> El resultado es <strong>6x³ + 2x² + 2x</strong>.
+                `
+            },
+            {
+                problema: "17. Resta de Polinomios: Restar (7x³ + 8x²y - 9xy²) - (3x³ - 5xy² + 2y³).",
+                desarrollo: `
+                    El signo negativo antes de un paréntesis invierte todos los signos del polinomio que se va a restar.<br><br>
+                    <strong>Paso 1:</strong> Eliminamos paréntesis y cambiamos los signos del sustraendo:<br>
+                    7x³ + 8x²y - 9xy² - 3x³ + 5xy² - 2y³<br><br>
+                    <strong>Paso 2:</strong> Agrupamos términos semejantes:<br>
+                    (7x³ - 3x³) + 8x²y + (-9xy² + 5xy²) - 2y³<br><br>
+                    <strong>Paso 3:</strong> Operamos:<br>
+                    4x³ + 8x²y - 4xy² - 2y³<br><br>
+                    <strong>Respuesta:</strong> <strong>4x³ + 8x²y - 4xy² - 2y³</strong>.
+                `
+            },
+            {
+                problema: "18. Multiplicación de Polinomios: Multiplicar el monomio 5x² por el polinomio (2x³ - 5x² - 4x + 3).",
+                desarrollo: `
+                    Se aplica la propiedad distributiva, multiplicando el monomio por cada uno de los términos del polinomio, recordando que al multiplicar bases iguales, los exponentes se suman.<br><br>
+                    <strong>Paso 1:</strong> 5x²(2x³) = 10x⁵<br>
+                    <strong>Paso 2:</strong> 5x²(-5x²) = -25x⁴<br>
+                    <strong>Paso 3:</strong> 5x²(-4x) = -20x³<br>
+                    <strong>Paso 4:</strong> 5x²(3) = 15x²<br><br>
+                    <strong>Respuesta:</strong> <strong>10x⁵ - 25x⁴ - 20x³ + 15x²</strong>.
+                `
+            },
+            {
+                problema: "19. Multiplicación Polinomio por Polinomio: (x² + 4x)(3x² + 2x - 7).",
+                desarrollo: `
+                    Se multiplica cada término del primer polinomio por cada término del segundo polinomio.<br><br>
+                    <strong>Paso 1:</strong> Multiplicamos x² por todo el segundo polinomio:<br>
+                    x²(3x²) + x²(2x) - x²(7) = 3x⁴ + 2x³ - 7x²<br><br>
+                    <strong>Paso 2:</strong> Multiplicamos 4x por todo el segundo polinomio:<br>
+                    4x(3x²) + 4x(2x) - 4x(7) = 12x³ + 8x² - 28x<br><br>
+                    <strong>Paso 3:</strong> Sumamos ambos resultados y agrupamos términos semejantes:<br>
+                    3x⁴ + (2x³ + 12x³) + (-7x² + 8x²) - 28x<br><br>
+                    <strong>Respuesta:</strong> <strong>3x⁴ + 14x³ + x² - 28x</strong>.
+                `
+            },
+            {
+                problema: "20. División de Polinomio entre Monomio: Dividir (3a⁴ + 2a³ - 7a²) entre (a).",
+                desarrollo: `
+                    Se divide cada término del numerador entre el monomio del denominador. Al dividir bases iguales, los exponentes se restan.<br><br>
+                    <strong>Paso 1:</strong> 3a⁴ ÷ a = 3a³<br>
+                    <strong>Paso 2:</strong> 2a³ ÷ a = 2a²<br>
+                    <strong>Paso 3:</strong> -7a² ÷ a = -7a<br><br>
+                    <strong>Respuesta:</strong> <strong>3a³ + 2a² - 7a</strong>.
+                `
+            },
+            {
+                problema: "21. División Larga de Polinomios: Dividir (m⁵ + 2m⁴ - 2m² - m) entre (m² - 1).",
+                desarrollo: `
+                    Se realiza como una división clásica, usando el término de mayor grado.<br><br>
+                    <strong>Paso 1:</strong> Dividimos m⁵ entre m², obtenemos <strong>m³</strong>. Multiplicamos m³ por (m² - 1) y restamos (cambiando signos): -m⁵ + m³.<br>
+                    Queda: 2m⁴ + m³ - 2m² - m.<br><br>
+                    <strong>Paso 2:</strong> Dividimos 2m⁴ entre m², obtenemos <strong>2m²</strong>. Restamos: -2m⁴ + 2m².<br>
+                    Queda: m³ - m.<br><br>
+                    <strong>Paso 3:</strong> Dividimos m³ entre m², obtenemos <strong>m</strong>. Restamos: -m³ + m.<br>
+                    Queda: 0.<br><br>
+                    <strong>Respuesta:</strong> El cociente es <strong>m³ + 2m² + m</strong> (división exacta).
+                `
+            },
+            {
+                problema: "22. Factorización por Factor Común Polinomio: Factorizar 24y⁴ + 16y³ - 4y² + 12y.",
+                desarrollo: `
+                    Identificamos el factor común numérico y literal.<br><br>
+                    <strong>Paso 1:</strong> El Máximo Común Divisor de 24, 16, 4 y 12 es <strong>4</strong>.<br>
+                    <strong>Paso 2:</strong> La literal común de menor exponente es <strong>y</strong>.<br>
+                    <strong>Paso 3:</strong> El factor común es <strong>4y</strong>.<br>
+                    <strong>Paso 4:</strong> Dividimos la expresión original entre 4y:<br>
+                    24y⁴/4y = 6y³, 16y³/4y = 4y², -4y²/4y = -y, 12y/4y = 3.<br><br>
+                    <strong>Respuesta:</strong> <strong>4y(6y³ + 4y² - y + 3)</strong>.
+                `
+            },
+            {
+                problema: "23. Factorización por Agrupación de Términos: Factorizar 6a² + 10ab - 3ab² - 5b².",
+                desarrollo: `
+                    Como tenemos cuatro términos, agrupamos en parejas que tengan elementos en común.<br><br>
+                    <strong>Paso 1:</strong> Agrupamos: (6a² - 3ab²) + (10ab - 5b²) -- <i>(Nota: El agrupamiento puede variar).</i><br>
+                    Tomemos: (6a² + 10ab) y (-3ab² - 5b²).<br><br>
+                    <strong>Paso 2:</strong> Factorizamos cada pareja:<br>
+                    Del primer grupo sacamos 2a: 2a(3a + 5b).<br>
+                    Del segundo grupo sacamos -b²: -b²(3a + 5b).<br><br>
+                    <strong>Paso 3:</strong> Ahora, extraemos el paréntesis común (3a + 5b).<br><br>
+                    <strong>Respuesta:</strong> <strong>(3a + 5b)(2a - b²)</strong>.
+                `
+            },
+            {
+                problema: "24. Trinomio Cuadrado Perfecto: Factorizar 4x² + 12x + 9.",
+                desarrollo: `
+                    Verificamos si los extremos tienen raíz cuadrada exacta y si el término central es el doble de su producto.<br><br>
+                    <strong>Paso 1:</strong> Raíz del primero: √4x² = 2x.<br>
+                    <strong>Paso 2:</strong> Raíz del tercero: √9 = 3.<br>
+                    <strong>Paso 3:</strong> Doble producto: 2(2x)(3) = 12x. (Coincide con el término central).<br>
+                    <strong>Paso 4:</strong> Escribimos el binomio al cuadrado con el signo del centro.<br><br>
+                    <strong>Respuesta:</strong> <strong>(2x + 3)²</strong>.
+                `
+            },
+            {
+                problema: "25. Diferencia de Cuadrados (Potencias Mayores): Factorizar 121p⁶ - 49.",
+                desarrollo: `
+                    Aplicamos la regla de binomios conjugados, donde al sacar la raíz cuadrada de un exponente par, simplemente se divide entre 2.<br><br>
+                    <strong>Paso 1:</strong> Raíz de 121p⁶: √121 = 11, y p^(6/2) = p³. Por lo tanto: 11p³.<br>
+                    <strong>Paso 2:</strong> Raíz de 49: 7.<br>
+                    <strong>Paso 3:</strong> Escribimos la suma y la resta de estas raíces.<br><br>
+                    <strong>Respuesta:</strong> <strong>(11p³ + 7)(11p³ - 7)</strong>.
+                `
+            },
+            {
+                problema: "26. Trinomio Cuadrado Perfecto por Adición y Sustracción: Factorizar a⁴ + a² + 1.",
+                desarrollo: `
+                    Verificamos si es TCP: √a⁴ = a², √1 = 1. El término central debería ser 2(a²)(1) = 2a², pero solo tenemos a². Nos falta un a².<br><br>
+                    <strong>Paso 1:</strong> Sumamos y restamos a² para no alterar la expresión:<br>
+                    (a⁴ + a² + a² + 1) - a² = (a⁴ + 2a² + 1) - a²<br><br>
+                    <strong>Paso 2:</strong> Factorizamos el TCP del paréntesis:<br>
+                    (a² + 1)² - a²<br><br>
+                    <strong>Paso 3:</strong> Ahora tenemos una Diferencia de Cuadrados. Las raíces son (a²+1) y (a).<br><br>
+                    <strong>Respuesta:</strong> <strong>(a² + a + 1)(a² - a + 1)</strong>.
+                `
+            },
+            {
+                problema: "27. Trinomio de la forma x² + bx + c: Factorizar x² - 6x + 8.",
+                desarrollo: `
+                    Buscamos dos números que multiplicados den +8 y que sumados den -6.<br><br>
+                    <strong>Paso 1:</strong> Los números multiplicados deben dar positivo, y sumados negativo, así que ambos deben ser negativos.<br>
+                    <strong>Paso 2:</strong> (-4) × (-2) = 8.<br>
+                    <strong>Paso 3:</strong> (-4) + (-2) = -6. ¡Son correctos!<br><br>
+                    <strong>Respuesta:</strong> <strong>(x - 4)(x - 2)</strong>.
+                `
+            },
+            {
+                problema: "28. Trinomio de la forma ax² + bx + c (Método de Tijeras): Factorizar 3x² + 8x + 4.",
+                desarrollo: `
+                    Buscamos factores del primer y último término, y los cruzamos para que la suma dé el del medio.<br><br>
+                    <strong>Paso 1:</strong> Factores de 3x² = (3x) y (x).<br>
+                    <strong>Paso 2:</strong> Factores de 4 = (2) y (2).<br>
+                    <strong>Paso 3:</strong> Multiplicación cruzada:<br>
+                    (3x * 2) = 6x<br>
+                    (x * 2) = 2x<br>
+                    Sumando 6x + 2x = 8x (Coincide con el centro).<br><br>
+                    <strong>Respuesta:</strong> Agrupamos horizontalmente: <strong>(3x + 2)(x + 2)</strong>.
+                `
+            },
+            {
+                problema: "29. Suma de Cubos: Factorizar 8x³ + 125.",
+                desarrollo: `
+                    La regla dice: a³ + b³ = (a + b)(a² - ab + b²).<br><br>
+                    <strong>Paso 1:</strong> Obtenemos las raíces cúbicas de los términos:<br>
+                    Raíz cúbica de 8x³ = 2x.<br>
+                    Raíz cúbica de 125 = 5.<br><br>
+                    <strong>Paso 2:</strong> Sustituimos en la fórmula:<br>
+                    Primer paréntesis: (2x + 5).<br>
+                    Segundo paréntesis: (2x)² - (2x)(5) + (5)² = 4x² - 10x + 25.<br><br>
+                    <strong>Respuesta:</strong> <strong>(2x + 5)(4x² - 10x + 25)</strong>.
+                `
+            },
+            {
+                problema: "30. Diferencia de Cubos: Factorizar 27m⁹ - 64n⁶.",
+                desarrollo: `
+                    La regla dice: a³ - b³ = (a - b)(a² + ab + b²). Para las raíces cúbicas, los exponentes se dividen entre 3.<br><br>
+                    <strong>Paso 1:</strong> Raíces cúbicas:<br>
+                    √[3]27m⁹ = 3m³<br>
+                    √[3]64n⁶ = 4n²<br><br>
+                    <strong>Paso 2:</strong> Sustituimos:<br>
+                    Primer paréntesis: (3m³ - 4n²).<br>
+                    Segundo paréntesis: (3m³)² + (3m³)(4n²) + (4n²)².<br><br>
+                    <strong>Respuesta:</strong> <strong>(3m³ - 4n²)(9m⁶ + 12m³n² + 16n⁴)</strong>.
+                `
+            },
+            {
+                problema: "31. Suma de Fracciones Algebraicas (MCM Simple): Resolver 5x/2 + 4/3x - 1/x.",
+                desarrollo: `
+                    Obtenemos el Mínimo Común Múltiplo (MCM) de los denominadores: 2, 3x, x.<br><br>
+                    <strong>Paso 1:</strong> El MCM de 2 y 3 es 6. La literal común mayor es x. El MCM total es <strong>6x</strong>.<br><br>
+                    <strong>Paso 2:</strong> Dividimos 6x entre cada denominador y multiplicamos por el numerador:<br>
+                    - (6x/2)*(5x) = 3x * 5x = 15x²<br>
+                    - (6x/3x)*(4) = 2 * 4 = 8<br>
+                    - (6x/x)*(1) = 6 * 1 = 6<br><br>
+                    <strong>Paso 3:</strong> Unificamos: (15x² + 8 - 6) / 6x.<br><br>
+                    <strong>Respuesta:</strong> <strong>(15x² + 2) / 6x</strong>.
+                `
+            },
+            {
+                problema: "32. Suma y Resta de Fracciones con Factorización: Resolver 2x/(x²-9) + 2/(x+3) - 1/(x-3).",
+                desarrollo: `
+                    Primero factorizamos todos los denominadores posibles para hallar el MCM.<br><br>
+                    <strong>Paso 1:</strong> x²-9 se factoriza como (x-3)(x+3). Así, el MCM es <strong>(x-3)(x+3)</strong>.<br><br>
+                    <strong>Paso 2:</strong> Ajustamos los numeradores:<br>
+                    - Para 2x/(x-3)(x+3), se queda igual: 2x.<br>
+                    - Para 2/(x+3), falta el (x-3): 2(x-3) = 2x - 6.<br>
+                    - Para 1/(x-3), falta el (x+3): -1(x+3) = -x - 3.<br><br>
+                    <strong>Paso 3:</strong> Sumamos los numeradores: 2x + 2x - 6 - x - 3 = 3x - 9.<br><br>
+                    <strong>Paso 4:</strong> El numerador se puede factorizar a 3(x-3). Al dividir entre (x-3)(x+3), el (x-3) se cancela arriba y abajo.<br><br>
+                    <strong>Respuesta:</strong> <strong>3 / (x + 3)</strong>.
+                `
+            },
+            {
+                problema: "33. Multiplicación de Fracciones Algebraicas: Resolver (xz / 15ab) * (25b² / x²).",
+                desarrollo: `
+                    La multiplicación es directa: numerador con numerador y denominador con denominador. Luego simplificamos.<br><br>
+                    <strong>Paso 1:</strong> Multiplicamos directo:<br>
+                    (xz * 25b²) / (15ab * x²) = 25xb²z / 15abx²<br><br>
+                    <strong>Paso 2:</strong> Simplificamos los números: 25/15 se reduce a 5/3.<br><br>
+                    <strong>Paso 3:</strong> Simplificamos las letras restando exponentes:<br>
+                    x/x² deja una 'x' abajo.<br>
+                    b²/b deja una 'b' arriba.<br><br>
+                    <strong>Respuesta:</strong> <strong>5bz / 3ax</strong>.
+                `
+            },
+            {
+                problema: "34. División de Fracciones Algebraicas: Resolver (28a⁴b⁹ / x³y⁵) ÷ (35a²b⁹ / xy⁵).",
+                desarrollo: `
+                    La división se resuelve con multiplicación cruzada (rebote).<br><br>
+                    <strong>Paso 1:</strong> (28a⁴b⁹ * xy⁵) / (x³y⁵ * 35a²b⁹)<br>
+                    Queda: 28a⁴b⁹xy⁵ / 35a²b⁹x³y⁵<br><br>
+                    <strong>Paso 2:</strong> Simplificamos números: 28/35 se reduce a 4/5.<br><br>
+                    <strong>Paso 3:</strong> Simplificamos literales:<br>
+                    a⁴/a² = a² arriba.<br>
+                    b⁹/b⁹ se cancela.<br>
+                    x/x³ = x² abajo.<br>
+                    y⁵/y⁵ se cancela.<br><br>
+                    <strong>Respuesta:</strong> <strong>4a² / 5x²</strong>.
+                `
+            },
+            {
+                problema: "35. Ecuación Lineal Básica: Resolver 7x - 3 = 18 + 4x.",
+                desarrollo: `
+                    Movemos los términos con 'x' a un lado y los números solos al otro, cambiando sus signos.<br><br>
+                    <strong>Paso 1:</strong> 7x - 4x = 18 + 3<br>
+                    <strong>Paso 2:</strong> 3x = 21<br>
+                    <strong>Paso 3:</strong> x = 21 / 3<br><br>
+                    <strong>Respuesta:</strong> <strong>x = 7</strong>.
+                `
+            },
+            {
+                problema: "36. Ecuación de 1er Grado con Fracciones: Resolver x/(x²-25) + 5/(x-5) = 1/(x+5).",
+                desarrollo: `
+                    Multiplicamos todo por el MCM de los denominadores. Sabemos que x²-25 es (x-5)(x+5). Ese es el MCM.<br><br>
+                    <strong>Paso 1:</strong> Multiplicamos toda la ecuación por (x-5)(x+5).<br>
+                    - La primera queda: x.<br>
+                    - La segunda queda: 5(x+5) = 5x + 25.<br>
+                    - La tercera queda: 1(x-5) = x - 5.<br><br>
+                    <strong>Paso 2:</strong> Ecuación lineal: x + 5x + 25 = x - 5<br>
+                    <strong>Paso 3:</strong> Agrupamos: 6x + 25 = x - 5  -->  5x = -30.<br>
+                    <strong>Paso 4:</strong> x = -30 / 5.<br><br>
+                    <strong>Respuesta:</strong> <strong>x = -6</strong>.
+                `
+            },
+            {
+                problema: "37. Despeje con Múltiples Literales: Despejar 'x' en la ecuación ax + x = 5a - 1.",
+                desarrollo: `
+                    Cuando hay varias variables, aplicamos factorización (factor común) para aislar la 'x'.<br><br>
+                    <strong>Paso 1:</strong> Sacamos 'x' como factor común en la izquierda.<br>
+                    x(a + 1) = 5a - 1<br><br>
+                    <strong>Paso 2:</strong> El bloque (a + 1) que está multiplicando pasa dividiendo al otro lado completo.<br><br>
+                    <strong>Respuesta:</strong> <strong>x = (5a - 1) / (a + 1)</strong>.
+                `
+            },
+            {
+                problema: "38. Ecuación de 2do Grado por Factorización: Resolver 6x² - 24x - 30 = 0.",
+                desarrollo: `
+                    Primero simplificamos la ecuación si todos los coeficientes son múltiplos de un número.<br><br>
+                    <strong>Paso 1:</strong> Dividimos todo entre 6.<br>
+                    x² - 4x - 5 = 0<br><br>
+                    <strong>Paso 2:</strong> Factorizamos buscando dos números que multiplicados den -5 y sumados den -4.<br>
+                    (x - 5)(x + 1) = 0<br><br>
+                    <strong>Paso 3:</strong> Igualamos cada binomio a cero y despejamos.<br>
+                    x - 5 = 0 --> x = 5<br>
+                    x + 1 = 0 --> x = -1<br><br>
+                    <strong>Respuesta:</strong> <strong>x₁ = 5, x₂ = -1</strong>.
+                `
+            },
+            {
+                problema: "39. Ecuación de 2do Grado por Fórmula General: Resolver x² + x - 1 = 0.",
+                desarrollo: `
+                    Al no ser factorizable fácilmente, usamos la fórmula general: x = [-b ± √(b² - 4ac)] / 2a. Aquí a=1, b=1, c=-1.<br><br>
+                    <strong>Paso 1:</strong> Sustituimos.<br>
+                    x = [-1 ± √((1)² - 4(1)(-1))] / 2(1)<br><br>
+                    <strong>Paso 2:</strong> Resolvemos el discriminante.<br>
+                    x = [-1 ± √(1 + 4)] / 2<br>
+                    x = [-1 ± √5] / 2<br><br>
+                    <strong>Paso 3:</strong> Como √5 no es exacta, se deja expresada.<br><br>
+                    <strong>Respuesta:</strong> <strong>x₁ = (-1 + √5)/2, x₂ = (-1 - √5)/2</strong>.
+                `
+            },
+            {
+                problema: "40. Sistemas de Ecuaciones (Suma y Resta): Resolver 3x - 4y = 10 y 5x + 3y = 7.",
+                desarrollo: `
+                    Buscamos eliminar 'y'. El MCM entre 4 y 3 es 12. Multiplicamos la primera por 3 y la segunda por 4.<br><br>
+                    <strong>Paso 1:</strong> (3x - 4y = 10) * 3  -->  9x - 12y = 30<br>
+                    <strong>Paso 2:</strong> (5x + 3y = 7) * 4   -->  20x + 12y = 28<br><br>
+                    <strong>Paso 3:</strong> Sumamos de forma vertical:<br>
+                    29x + 0 = 58  -->  29x = 58  --> x = 2.<br><br>
+                    <strong>Paso 4:</strong> Sustituimos x=2 en la segunda original:<br>
+                    5(2) + 3y = 7  -->  10 + 3y = 7  -->  3y = -3  --> y = -1.<br><br>
+                    <strong>Respuesta:</strong> <strong>x = 2, y = -1</strong>.
+                `
+            }
             ],
             computo: [
                 {
@@ -1648,7 +2505,206 @@
                         <strong>¿Por qué volátil?:</strong> Porque solo guarda datos mientras hay energía eléctrica. Al apagar la computadora, todo lo que estaba en la RAM se borra instantáneamente.<br>
                         <strong>Respuesta:</strong> Es memoria de acceso rápido y <strong>volátil porque pierde su información al apagarse</strong>.
                     `
-                }
+                },
+              {
+                problema: "16. Sistema Operativo (Personalización): ¿Cuáles son los pasos para cambiar la resolución de la pantalla en Windows 7?",
+                desarrollo: `
+                    La configuración del escritorio se puede modificar de manera rápida desde el menú contextual.<br><br>
+                    <strong>Paso 1:</strong> Hacer clic con el botón derecho del ratón sobre un espacio libre del Escritorio.<br>
+                    <strong>Paso 2:</strong> Seleccionar la opción <strong>Resolución de pantalla</strong> en el menú desplegable.<br>
+                    <strong>Paso 3:</strong> En la ventana emergente, modificar la resolución (número de píxeles mostrados) y hacer clic en Aceptar[cite: 3].<br><br>
+                    <strong>Respuesta:</strong> Clic derecho en Escritorio -> Resolución de pantalla.
+                `
+            },
+            {
+                problema: "17. Windows (Carpetas): ¿Cómo se crea correctamente una nueva carpeta en el escritorio o en cualquier directorio?",
+                desarrollo: `
+                    <strong>Paso 1:</strong> Nos posicionamos en cualquier parte libre del escritorio o directorio.<br>
+                    <strong>Paso 2:</strong> Oprimimos <strong>clic derecho</strong> con el ratón para abrir el menú contextual.<br>
+                    <strong>Paso 3:</strong> Seleccionamos la opción <strong>Nuevo</strong>, lo que desplegará un submenú.<br>
+                    <strong>Paso 4:</strong> Hacemos clic en <strong>Carpeta</strong>, escribimos el nombre deseado y oprimimos Enter[cite: 3].<br><br>
+                    <strong>Respuesta:</strong> Clic Derecho -> Nuevo -> Carpeta.
+                `
+            },
+            {
+                problema: "18. Word (Atajos Básicos): ¿Qué atajo de teclado se utiliza para seleccionar TODO el texto de un documento de Word en la versión en español?",
+                desarrollo: `
+                    <strong>Comandos de selección rápida:</strong><br>
+                    Para evitar tener que arrastrar el ratón a través de páginas enteras, el procesador de texto incorpora un atajo universal para resaltar todo el contenido simultáneamente.<br><br>
+                    <strong>Respuesta:</strong> La combinación de teclas <strong>Ctrl + E</strong> permite seleccionar todo el texto con formato y objetos presentes en el documento[cite: 3].
+                `
+            },
+            {
+                problema: "19. Word (Párrafos vs Saltos): ¿Cómo se inserta un Salto de línea de forma voluntaria sin iniciar un nuevo párrafo estructural?",
+                desarrollo: `
+                    Word se encarga de acomodar el texto dentro de los márgenes. Al pulsar INTRO, Word asume que queremos empezar un nuevo párrafo (con su respectivo espaciado).<br><br>
+                    <strong>Solución:</strong> Para bajar a la siguiente línea manteniendo la estructura del mismo bloque, se utiliza una combinación de teclas.<br><br>
+                    <strong>Respuesta:</strong> Se realiza el salto de línea presionando <strong>MAYÚS + INTRO (Shift + Enter)</strong>[cite: 3].
+                `
+            },
+            {
+                problema: "20. Word (Formato de Fuente): ¿Cuáles son los atajos de teclado rápidos para aplicar Negrita, Cursiva y Subrayado a un texto seleccionado?",
+                desarrollo: `
+                    De acuerdo con los métodos abreviados de teclado listados en la guía para la versión en español de Word:<br><br>
+                    - Para aplicar <strong>Negrita</strong>: <strong>Ctrl + N</strong><br>
+                    - Para aplicar <em>Cursiva</em>: <strong>Ctrl + K</strong><br>
+                    - Para aplicar <u>Subrayado</u>: <strong>Ctrl + S</strong>[cite: 3].
+                `
+            },
+            {
+                problema: "21. Word (Alineación): ¿Qué comandos de teclado se emplean para Centrar, Justificar, Alinear a la Izquierda y Alinear a la Derecha un párrafo?",
+                desarrollo: `
+                    Modificar la alineación del párrafo actual se puede hacer muy velozmente con los siguientes comandos[cite: 3]:<br><br>
+                    - <strong>Centrar:</strong> Ctrl + T<br>
+                    - <strong>Justificar</strong> (recto en ambos márgenes): Ctrl + J<br>
+                    - <strong>Alinear a la Izquierda:</strong> Ctrl + Q<br>
+                    - <strong>Alinear a la Derecha:</strong> Ctrl + D
+                `
+            },
+            {
+                problema: "22. Word (Edición Masiva): ¿Cómo puedes reemplazar masivamente una palabra repetida incorrectamente por otra en un documento extenso?",
+                desarrollo: `
+                    <strong>Paso 1:</strong> Desde la pestaña Inicio, grupo Edición, se elige la opción Reemplazar, o se utiliza el atajo <strong>Ctrl + L</strong>.<br>
+                    <strong>Paso 2:</strong> En el campo "Buscar" se introduce la palabra errónea.<br>
+                    <strong>Paso 3:</strong> En el campo "Reemplazar con" se introduce la palabra correcta.<br>
+                    <strong>Paso 4:</strong> Al hacer clic en <strong>Reemplazar todos</strong>, Word sustituirá las coincidencias sin preguntar una por una[cite: 3].
+                `
+            },
+            {
+                problema: "23. Word (Marcas de Formato): ¿Qué herramienta se utiliza para saber si un texto fue dividido mediante saltos de línea o saltos de párrafo, haciendo visibles las marcas ocultas?",
+                desarrollo: `
+                    A veces el diseño de un documento parece desconfigurado. Para diagnosticarlo:<br><br>
+                    <strong>Solución:</strong> La herramienta <strong>"Mostrar Todo" (cuyo icono es un símbolo ¶, conocido como calderón)</strong> permite visualizar las marcas de párrafo, tabulaciones y saltos de línea ocultos. Se encuentra en la pestaña Inicio, en el grupo Párrafo[cite: 3].
+                `
+            },
+            {
+                problema: "24. Word (Fondo de Página): Describa la ruta para insertar una 'Marca de agua' de texto personalizada (ej. la palabra 'STRM') en un documento.",
+                desarrollo: `
+                    <strong>Paso 1:</strong> En la Cinta de Opciones, ir a la pestaña <strong>Diseño</strong>.<br>
+                    <strong>Paso 2:</strong> En el grupo "Fondo de página", hacer clic en <strong>Marca de agua</strong> y seleccionar "Marcas de agua personalizadas".<br>
+                    <strong>Paso 3:</strong> En la ventana emergente, seleccionar "Marca de agua de texto", escribir "STRM" en la casilla Texto, configurar fuente, tamaño y color.<br>
+                    <strong>Paso 4:</strong> Dar clic en Aplicar y luego Cerrar[cite: 3].
+                `
+            },
+            {
+                problema: "25. Hardware (Clasificación de Dispositivos): Clasifique los siguientes dispositivos como periféricos de Entrada, Salida o Almacenamiento: Teclado, Plotter, Memoria USB, Escáner QR.",
+                desarrollo: `
+                    Basado en la división de componentes físicos (Hardware)[cite: 3]:<br><br>
+                    - <strong>Teclado:</strong> Dispositivo periférico de Entrada (introduce datos).<br>
+                    - <strong>Escáner de Código QR:</strong> Dispositivo periférico de Entrada (captura óptica).<br>
+                    - <strong>Plotter:</strong> Dispositivo periférico de Salida (imprime planos y gráficos de gran formato).<br>
+                    - <strong>Memoria USB:</strong> Dispositivo de Almacenamiento por medio electrónico (pendrive).
+                `
+            },
+            {
+                problema: "26. Software (Clasificación General): Determine la categoría o tipo de software al que pertenecen 'Windows', 'Adobe Photoshop' y 'Visual Studio'.",
+                desarrollo: `
+                    Los programas intangibles se dividen según su propósito final[cite: 3]:<br><br>
+                    - <strong>Windows:</strong> Software de Sistema Operativo (Da soporte y controla el hardware base).<br>
+                    - <strong>Adobe Photoshop:</strong> Software de Aplicación (Diseñado para una tarea específica del usuario: edición de imágenes).<br>
+                    - <strong>Visual Studio:</strong> Software de Programación (Herramientas para que los programadores desarrollen nuevos códigos).
+                `
+            },
+            {
+                problema: "27. Word (Configuración Visual): Si las reglas de medición superior e izquierda no aparecen en el área de trabajo de Word, ¿cómo se activan?",
+                desarrollo: `
+                    Las reglas son vitales para establecer tabulaciones y sangrías de forma manual.<br><br>
+                    <strong>Respuesta:</strong> Para visualizarlas deberás ir a la pestaña <strong>Vista</strong> en la Cinta de Opciones y marcar la casilla <strong>Regla</strong> en el grupo Mostrar[cite: 3].
+                `
+            },
+            {
+                problema: "28. Excel (Estructura Básica): ¿Cómo se identifican las columnas y las filas en la hoja de cálculo, y cómo se le nombra a la intersección de ambas?",
+                desarrollo: `
+                    <strong>Columnas:</strong> Se identifican por letras simples, dobles o triples (desde la A hasta la AAA).<br>
+                    <strong>Filas:</strong> Se identifican secuencialmente por números.<br>
+                    <strong>Celdas:</strong> La intersección de una fila y una columna forma una Celda, y hacemos referencia a ella por su coordenada (ej. A1). El conjunto de celdas se denomina <strong>Rango</strong>[cite: 3].
+                `
+            },
+            {
+                problema: "29. Excel (Cinta de Opciones): ¿Qué combinación de teclas permite ocultar o mostrar rápidamente las fichas de la Cinta de Opciones para maximizar el área de trabajo?",
+                desarrollo: `
+                    En ocasiones las tablas de datos son tan grandes que necesitamos más espacio vertical en el monitor.<br><br>
+                    <strong>Respuesta:</strong> Podemos mostrar u ocultar el contenido inferior de las fichas a través de la combinación de teclas <strong>CTRL + F1</strong>[cite: 3].
+                `
+            },
+            {
+                problema: "30. Excel (Alineación de Texto): Si ingresas un texto muy largo en una celda y excede la anchura de la columna, ¿qué opción se debe activar para que se acomode en múltiples renglones dentro de la misma celda?",
+                desarrollo: `
+                    Por defecto, Excel utiliza las celdas contiguas de la derecha para visualizar texto largo. <br><br>
+                    <strong>Solución:</strong> Se debe utilizar la herramienta <strong>"Ajustar texto"</strong> (ubicada en Inicio -> Alineación). Esto incrementará la altura de la fila y el contenido bajará a una segunda línea conservándose exclusivamente dentro de su celda original[cite: 3].
+                `
+            },
+            {
+                problema: "31. Excel (Títulos de Tablas): ¿Qué botón del grupo Alineación se utiliza para fusionar varias celdas formando una sola y centrar su contenido (muy útil para títulos)?",
+                desarrollo: `
+                    <strong>Respuesta:</strong> El botón <strong>"Combinar y centrar"</strong> unirá todas las celdas previamente seleccionadas para que formen un solo bloque y centrará el texto ingresado respecto a ese nuevo ancho[cite: 3].
+                `
+            },
+            {
+                problema: "32. Excel (Protección de Hoja): Para evitar modificaciones o errores accidentales en fórmulas, ¿cuáles son los dos pasos para bloquear celdas efectivamente?",
+                desarrollo: `
+                    <strong>Paso 1:</strong> Seleccionar las celdas y en "Formato de celdas" pestaña "Proteger", confirmar que la casilla <strong>"Bloqueada"</strong> esté activa (suele estarlo por defecto).<br>
+                    <strong>Paso 2:</strong> Para que este bloqueo surta efecto, es indispensable ir a la pestaña <strong>Revisar</strong> y hacer clic en <strong>Proteger hoja</strong>. Solo hasta proteger la hoja, el bloqueo de las celdas se activa[cite: 3].
+                `
+            },
+            {
+                problema: "33. Excel (Operadores Básicos): Indique los símbolos aritméticos y lógicos utilizados en Excel para la Exponenciación, la Unión (Concatenar texto) y la comparación de 'Distinto de' (No igual a).",
+                desarrollo: `
+                    Según la tabla de operadores de Excel[cite: 3]:<br><br>
+                    - Exponenciación: <strong>^</strong> (Acento circunflejo)<br>
+                    - Unión / Concatenar: <strong>&</strong> (Ampersand)<br>
+                    - Distinto de / Desigualdad: <strong><></strong> (Menor y Mayor enfrentados)
+                `
+            },
+            {
+                problema: "34. Excel (Selección con Teclado): Describa cómo se selecciona una Columna entera y una Fila entera utilizando exclusivamente atajos de teclado.",
+                desarrollo: `
+                    Posicionando el cursor en cualquier celda que pertenezca a la fila/columna deseada:<br><br>
+                    - Para seleccionar una columna entera: <strong>Ctrl + Barra Espaciadora</strong>.<br>
+                    - Para seleccionar una fila entera: <strong>Mayús (Shift) + Barra Espaciadora</strong>[cite: 3].
+                `
+            },
+            {
+                problema: "35. Excel (Ampliación de Selección): Si estás en la celda A1 y deseas seleccionar un cuadro hasta la celda C5, ¿cómo lo haces combinando el teclado y el ratón?",
+                desarrollo: `
+                    <strong>Respuesta:</strong> Para ampliar una selección con celdas contiguas, debes mantener pulsada la tecla <strong>MAYÚS (Shift)</strong> y hacer clic con el ratón en la esquina opuesta, es decir, donde quieres que termine la selección (celda C5)[cite: 3].
+                `
+            },
+            {
+                problema: "36. Excel (Formato de Tablas): Al convertir un rango de datos en una 'Tabla' oficial (Ctrl+T o Insertar->Tabla), ¿qué casilla clave debes marcar si ya escribiste los nombres de las columnas arriba?",
+                desarrollo: `
+                    <strong>Respuesta:</strong> En el cuadro de diálogo "Crear tabla", se debe asegurar de activar la casilla de verificación <strong>"La tabla tiene encabezados"</strong>. Esto evitará que Excel ordene tus títulos como si fueran datos regulares[cite: 3].
+                `
+            },
+            {
+                problema: "37. Excel (Filtros): ¿Cuál es el proceso rápido para activar el Autofiltro y ocultar las filas que no cumplen ciertos criterios en una tabla de datos?",
+                desarrollo: `
+                    <strong>Paso 1:</strong> Seleccionar cualquier celda dentro del rango de datos.<br>
+                    <strong>Paso 2:</strong> Dirigirse a la pestaña <strong>Datos</strong> y hacer clic en el botón grande con forma de embudo llamado <strong>Filtro</strong>.<br>
+                    <strong>Resultado:</strong> Aparecerán flechas desplegables en los encabezados que permitirán seleccionar o buscar los registros deseados[cite: 3].
+                `
+            },
+            {
+                problema: "38. Excel (Fórmulas Básicas): Si tienes una columna con precios del A3 al A12, ¿cómo aplicas formato monetario y cómo sumas el total en la celda A13?",
+                desarrollo: `
+                    <strong>Paso 1 (Formato):</strong> Seleccionar de A3 a A12, ir a la pestaña Inicio -> grupo Número y elegir el formato de Moneda/Contabilidad ($)[cite: 3].<br><br>
+                    <strong>Paso 2 (Fórmula):</strong> Posicionarse en A13, escribir el símbolo igual seguido de la función y el rango: <strong>=SUMA(A3:A12)</strong>. Presionar Enter. El resultado heredará automáticamente el formato de moneda.
+                `
+            },
+            {
+                problema: "39. Word y Excel (Teclas de Función): ¿Qué cuadros de diálogo y acciones maestras ejecutan las teclas F5 y F12 en los programas de Office?",
+                desarrollo: `
+                    En los métodos abreviados universales[cite: 3]:<br><br>
+                    - <strong>F5:</strong> Ejecuta el cuadro de diálogo "Ir a" (que también contiene las pestañas para Buscar y Reemplazar).<br>
+                    - <strong>F12:</strong> Ejecuta directamente la orden "Guardar como", saltándose las pantallas intermedias y abriendo la ventana del explorador para elegir ubicación y formato.
+                `
+            },
+            {
+                problema: "40. Windows (Guardar Archivos): Al tratar de dar nombre a un archivo en Windows, el sistema lanza un error si incluyes ciertos símbolos. ¿Qué caracteres están estrictamente prohibidos?",
+                desarrollo: `
+                    <strong>Respuesta:</strong> Al momento de guardar los archivos, no se pueden usar caracteres especiales de sistema como: <strong>¿, ?, <, >, #, @, /, \\, :, *, ", |</strong>. Estos son ilegibles para asignar nombres o son utilizados internamente por Windows para jerarquía de carpetas y comandos lógicos[cite: 3].
+                `
+            }
             ],
         };
       
