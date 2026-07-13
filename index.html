@@ -526,6 +526,9 @@
 
         <div id="block-section">
             <h3 id="block-title" style="text-align: center; color: var(--primary-color); margin-bottom: 20px;">Elige qué bloque deseas</h3>
+          <button id="btn-conceptos" class="btn-action" onclick="iniciarConceptos()" style="background-color: #f3e5f5; color: #7b1fa2; border: 2px solid #ce93d8; width: 100%; margin-bottom: 20px; font-size: 1.2rem; display: none;">
+                📖 Ver Glosario de Conceptos
+            </button>
             <div class="grid-layout" id="block-container">
                 </div>
             <div class="controls-group" style="margin-top: 30px;">
@@ -577,6 +580,19 @@
             <div class="controls-group" style="margin-top: 20px;">
                 <button class="btn-action btn-back" onclick="volverInicio()">⬅ Regresar al Inicio</button>
                 <button class="btn-action" onclick="volverAlMenu()">📚 Cambiar de Materia</button>
+            </div>
+        </div>
+      
+      <div id="concepts-section" style="display: none;">
+            <div class="question-header">
+                <span id="concepts-subject-title">📖 Conceptos</span>
+            </div>
+            
+            <div id="concepts-content-list" style="max-height: 65vh; overflow-y: auto; padding-right: 10px;">
+                </div>
+
+            <div class="controls-group" style="margin-top: 20px;">
+                <button class="btn-action btn-back" onclick="volverABloques()">⬅ Regresar a los Bloques</button>
             </div>
         </div>
 
@@ -3203,6 +3219,14 @@
             quizSection.style.display = 'none';
             studySection.style.display = 'none';
             blockSection.style.display = 'block';
+          
+            // NUEVO: Mostrar el botón de conceptos SOLO si estamos en modo estudio
+            const btnConceptos = document.getElementById('btn-conceptos');
+            if (modoActual === 'estudio') {
+                btnConceptos.style.display = 'block';
+            } else {
+                btnConceptos.style.display = 'none';
+            }
             
             document.getElementById('block-title').innerText = `Materia: ${baseDeDatos[materiaKey].nombre}`;
             subtitle.innerText = "Elige qué bloque deseas trabajar";
@@ -3290,6 +3314,45 @@
                     <div class="study-question" style="color: var(--primary-color);">Ejercicio ${index + 1}: ${ej.problema}</div>
                     <div style="background-color: #f1f8e9; padding: 15px; border-radius: 5px; margin-top: 15px; border-left: 4px solid #81c784; line-height: 1.6; font-size: 1.1rem;">
                         ${ej.desarrollo}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+      
+      function iniciarConceptos() {
+            // Ocultamos los bloques y mostramos los conceptos
+            blockSection.style.display = 'none';
+            document.getElementById('concepts-section').style.display = 'block';
+
+            // Ponemos el título de la materia actual
+            const subjectName = baseDeDatos[materiaActual].nombre;
+            document.getElementById('concepts-subject-title').innerText = `📖 Conceptos: ${subjectName}`;
+
+            const container = document.getElementById('concepts-content-list');
+            container.innerHTML = '';
+
+            // Diccionario para traducir la llave al nombre exacto de la base de conocimiento
+            const mapaMaterias = {
+                'electronica': 'Electrónica',
+                'electricidad': 'Electricidad',
+                'computo': 'Cómputo',
+                'algebra': 'Álgebra'
+            };
+            const materiaBuscada = mapaMaterias[materiaActual];
+
+            // Filtramos la super base de datos de 160 conceptos para sacar solo los 40 de esta materia
+            const conceptosFiltrados = baseConocimiento.filter(c => c.materia === materiaBuscada);
+
+            // Imprimimos las tarjetas
+            conceptosFiltrados.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'study-card';
+                card.style.borderLeft = "4px solid #9c27b0"; // Borde morado distintivo
+                card.innerHTML = `
+                    <div class="study-question" style="color: #7b1fa2; font-size: 1.15rem;">${index + 1}. ${item.termino}</div>
+                    <div class="study-explanation" style="background-color: #f3e5f5; padding: 15px; border-radius: 5px; margin-top: 10px; color: #333; line-height: 1.5; font-size: 1.05rem;">
+                        ${item.definicion}
                     </div>
                 `;
                 container.appendChild(card);
@@ -3481,6 +3544,7 @@
             detenerTemporizador();
             document.getElementById('config-section').style.display = 'none';
             document.getElementById('exercises-section').style.display = 'none';
+            document.getElementById('concepts-section').style.display = 'none';
         }
 
         function volverAlMenu() {
@@ -3506,6 +3570,8 @@
             quizSection.style.display = 'none';
             studySection.style.display = 'none';
             resultSection.style.display = 'none';
+            // NUEVA LÍNEA: Ocultar pantalla de conceptos
+            document.getElementById('concepts-section').style.display = 'none';
             
             if(esSimulacroGlobal) {
                 volverInicio();
@@ -3555,6 +3621,7 @@
             const isStudyVisible = document.getElementById('study-section').style.display === 'block';
             const isResultVisible = document.getElementById('result-section').style.display === 'block';
             const isExercisesVisible = document.getElementById('exercises-section').style.display === 'block';
+          const isConceptsVisible = document.getElementById('concepts-section').style.display === 'block';
 
             if (isMenuVisible) {
                 volverInicio();
