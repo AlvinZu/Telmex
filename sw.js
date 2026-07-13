@@ -1,4 +1,4 @@
-const CACHE_NAME = 'telmex-app-v1';
+const CACHE_NAME = 'telmex-app-v1.1';
 const ASSETS = [
   './index.html',
   './icon-152x152.jpg',
