@@ -321,6 +321,77 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+      
+        /* ========================================= */
+        /* ESTILOS DEL AVATAR Y ASISTENTE VIRTUAL    */
+        /* ========================================= */
+        .floating-avatar {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 65px;
+            height: 65px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            cursor: pointer;
+            z-index: 1000;
+            animation: float 3s ease-in-out infinite;
+            border: 3px solid white;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .assistant-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .assistant-content {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 12px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            max-height: 80vh;
+        }
+
+        .assistant-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .close-assistant {
+            background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--error-color);
+        }
+
+        .assistant-results {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-top: 15px;
+            padding-right: 10px;
+        }
 
         /* ========================================================= */
         /* MAGIA DE RESPONSIVIDAD PARA CELULARES (DISEÑO ADAPTATIVO) */
@@ -518,6 +589,26 @@
                 <button class="btn-action" onclick="volverInicio()">Ir al Inicio</button>
             </div>
         </div>
+      
+      <div class="floating-avatar" onclick="abrirAsistente()">
+        🤖
+    </div>
+
+    <div class="assistant-modal" id="assistant-modal">
+        <div class="assistant-content">
+            <div class="assistant-header">
+                <h3 style="margin: 0; color: var(--primary-color);">🤖 Asistente Telmex</h3>
+                <button class="close-assistant" onclick="cerrarAsistente()">✖</button>
+            </div>
+            
+            <p style="margin-top: 0; font-size: 0.95rem; color: #666;">Pregúntame un concepto y buscaré en todas tus guías (ej. "Diodo", "Trinomio", "Router").</p>
+            
+            <input type="text" id="assistant-search" class="search-input" placeholder="Escribe tu duda aquí..." oninput="ejecutarBusquedaAsistente()" style="margin-bottom: 0;">
+
+            <div class="assistant-results" id="assistant-results">
+                </div>
+        </div>
+    </div>
     </div>
 
     <script>
@@ -2708,6 +2799,179 @@
             ],
         };
       
+        // ==========================================
+        // MEGA BASE DE CONOCIMIENTO (160 CONCEPTOS)
+        // ==========================================
+        const baseConocimiento = [
+            // ================== ELECTRÓNICA (40 Conceptos) ==================
+            { materia: "Electrónica", termino: "Diodo Zener", definicion: "Trabaja en la zona de ruptura. Mantiene un voltaje constante, por lo que se usa como regulador de voltaje." },
+            { materia: "Electrónica", termino: "Diodo Rectificador", definicion: "Permite el paso de la corriente en un solo sentido. Convierte Corriente Alterna (CA) en Corriente Directa (CD) pulsante." },
+            { materia: "Electrónica", termino: "Diodo LED", definicion: "Diodo Emisor de Luz. Emite fotones cuando se polariza en directa. Su caída de voltaje típica va de 1.8V a 3.3V." },
+            { materia: "Electrónica", termino: "Transistor BJT", definicion: "Transistor de Unión Bipolar (Emisor, Base, Colector). Funciona como amplificador de corriente o interruptor." },
+            { materia: "Electrónica", termino: "Transistor MOSFET", definicion: "Transistor de Efecto de Campo. Se controla por voltaje (no por corriente). Es más eficiente y rápido que el BJT." },
+            { materia: "Electrónica", termino: "Compuerta AND", definicion: "Multiplicadora lógica. Su salida es 1 solo si TODAS sus entradas son 1." },
+            { materia: "Electrónica", termino: "Compuerta OR", definicion: "Sumadora lógica. Su salida es 1 si AL MENOS UNA de sus entradas es 1." },
+            { materia: "Electrónica", termino: "Compuerta NOT", definicion: "Inversora lógica. Si entra un 1, sale un 0. Si entra un 0, sale un 1." },
+            { materia: "Electrónica", termino: "Compuerta NAND", definicion: "AND negada. Su salida es 0 solo cuando todas sus entradas son 1." },
+            { materia: "Electrónica", termino: "Compuerta NOR", definicion: "OR negada. Su salida es 1 solo cuando todas sus entradas son 0." },
+            { materia: "Electrónica", termino: "Compuerta XOR", definicion: "OR Exclusiva. Su salida es 1 solo si sus entradas son DIFERENTES (ej. 1 y 0)." },
+            { materia: "Electrónica", termino: "Compuerta XNOR", definicion: "NOR Exclusiva. Su salida es 1 solo si sus entradas son IGUALES (ej. 1-1 o 0-0)." },
+            { materia: "Electrónica", termino: "Amplificador Operacional", definicion: "Circuito integrado de alta ganancia con entrada inversora (-) y no inversora (+). Se usa para sumar, comparar o amplificar señales." },
+            { materia: "Electrónica", termino: "Capacitor", definicion: "Almacena energía en campo eléctrico. Bloquea CD y deja pasar CA. Se mide en Faradios (F)." },
+            { materia: "Electrónica", termino: "Inductor (Bobina)", definicion: "Almacena energía en campo magnético. Se opone a los cambios bruscos de corriente. Se mide en Henrios (H)." },
+            { materia: "Electrónica", termino: "Osciloscopio", definicion: "Instrumento que grafica señales eléctricas en el tiempo (eje X = tiempo, eje Y = voltaje)." },
+            { materia: "Electrónica", termino: "Multímetro", definicion: "Herramienta que mide múltiples magnitudes: voltaje, corriente, resistencia y continuidad." },
+            { materia: "Electrónica", termino: "Fotodiodo", definicion: "Diodo sensible a la luz. Permite el paso de corriente cuando incide luz sobre él. (Usado en controles remotos)." },
+            { materia: "Electrónica", termino: "Tiristor (SCR)", definicion: "Rectificador controlado de silicio. Funciona como un interruptor que, una vez encendido, se queda activado." },
+            { materia: "Electrónica", termino: "TRIAC", definicion: "Componente semiconductor que controla el paso de Corriente Alterna (CA). Ideal para atenuadores de luz (dimmers)." },
+            { materia: "Electrónica", termino: "Optoacoplador", definicion: "Circuito que transmite señales eléctricas usando luz, aislando eléctricamente dos etapas del circuito para protegerlas." },
+            { materia: "Electrónica", termino: "Flip-Flop", definicion: "Circuito lógico secuencial capaz de almacenar un bit de información. Es la memoria básica de las computadoras." },
+            { materia: "Electrónica", termino: "Circuito Integrado (IC)", definicion: "Pastilla de silicio o microchip que contiene miles o millones de transistores miniaturizados." },
+            { materia: "Electrónica", termino: "Resistencia (Código Colores)", definicion: "Negro=0, Café=1, Rojo=2, Naranja=3, Amarillo=4, Verde=5, Azul=6, Violeta=7, Gris=8, Blanco=9." },
+            { materia: "Electrónica", termino: "Señal Analógica", definicion: "Señal continua que puede tomar valores infinitos dentro de un rango (ej. la voz humana, sensores de temperatura)." },
+            { materia: "Electrónica", termino: "Señal Digital", definicion: "Señal discreta que solo toma valores definidos, comúnmente 1 y 0 (Nivel Alto y Nivel Bajo)." },
+            { materia: "Electrónica", termino: "Frecuencia", definicion: "Número de ciclos o repeticiones de una onda en un segundo. Se mide en Hertz (Hz)." },
+            { materia: "Electrónica", termino: "Periodo (T)", definicion: "Tiempo que tarda una onda en completar un solo ciclo. Es el inverso de la frecuencia (T = 1/f)." },
+            { materia: "Electrónica", termino: "Amplitud", definicion: "Es el valor máximo (voltaje pico) que alcanza una onda desde su punto de reposo (cero)." },
+            { materia: "Electrónica", termino: "Ancho de Banda", definicion: "Rango de frecuencias en el que un circuito o sistema puede operar de manera óptima y sin distorsión." },
+            { materia: "Electrónica", termino: "Modulación AM/FM", definicion: "Técnica de montar información sobre una onda portadora. AM varía la Amplitud, FM varía la Frecuencia." },
+            { materia: "Electrónica", termino: "Impedancia (Z)", definicion: "Resistencia total al paso de la Corriente Alterna. Combina la resistencia pura y la reactancia de bobinas/capacitores." },
+            { materia: "Electrónica", termino: "Rectificador Onda Completa", definicion: "Circuito que usa 2 o 4 diodos (puente) para aprovechar ambos semiciclos de la CA, haciéndola más estable." },
+            { materia: "Electrónica", termino: "Microcontrolador", definicion: "Pequeña computadora en un solo chip que incluye CPU, memoria y puertos de entrada/salida (ej. Arduino)." },
+            { materia: "Electrónica", termino: "Protoboard", definicion: "Placa de pruebas con orificios conectados internamente, usada para armar circuitos sin necesidad de soldar." },
+            { materia: "Electrónica", termino: "Filtro Paso Bajo", definicion: "Circuito RC o RL que deja pasar frecuencias bajas y bloquea (atenúa) las altas frecuencias." },
+            { materia: "Electrónica", termino: "Filtro Paso Alto", definicion: "Circuito que bloquea las bajas frecuencias (incluyendo CD) y solo permite pasar señales de alta frecuencia." },
+            { materia: "Electrónica", termino: "Regulador 7805", definicion: "Circuito integrado popular de 3 pines que recibe voltajes altos y entrega exactamente 5V de salida." },
+            { materia: "Electrónica", termino: "Ruido Eléctrico", definicion: "Señales parásitas indeseadas que se mezclan con la señal original, degradando la comunicación." },
+            { materia: "Electrónica", termino: "Ley de Kirchhoff (Corrientes)", definicion: "La suma de las corrientes que entran a un nodo es igual a la suma de las corrientes que salen." },
+
+            // ================== ELECTRICIDAD (40 Conceptos) ==================
+            { materia: "Electricidad", termino: "Voltaje (Tensión)", definicion: "Fuerza electromotriz que empuja los electrones por el conductor. Se mide en Volts (V)." },
+            { materia: "Electricidad", termino: "Corriente Eléctrica", definicion: "Flujo de electrones viajando por un conductor. Se mide en Amperes (A)." },
+            { materia: "Electricidad", termino: "Resistencia Eléctrica", definicion: "Oposición al paso de la corriente, que disipa energía en forma de calor. Se mide en Ohms (Ω)." },
+            { materia: "Electricidad", termino: "Corriente Alterna (CA)", definicion: "Corriente que cambia de dirección (polo positivo a negativo) 60 veces por segundo (60Hz)." },
+            { materia: "Electricidad", termino: "Corriente Directa (CD)", definicion: "Corriente que viaja en un solo sentido, producida por baterías o celdas solares." },
+            { materia: "Electricidad", termino: "Ley de Watt", definicion: "Calcula la potencia o consumo eléctrico. P = V * I. Se mide en Watts (W)." },
+            { materia: "Electricidad", termino: "Ley de Ohm", definicion: "Relación fundamental de circuitos: Corriente es voltaje entre resistencia (I = V / R)." },
+            { materia: "Electricidad", termino: "Efecto Joule", definicion: "Calentamiento de un conductor debido a los choques de electrones al pasar por él." },
+            { materia: "Electricidad", termino: "Transformador", definicion: "Máquina de CA que eleva o reduce voltajes por inducción electromagnética mutua." },
+            { materia: "Electricidad", termino: "Sistema Trifásico", definicion: "Tres líneas de CA desfasadas 120°. Usado comercialmente por su eficiencia de transmisión." },
+            { materia: "Electricidad", termino: "Tierra Física (GND)", definicion: "Conexión al subsuelo mediante varilla Copperweld para descargar sobretensiones y proteger vidas." },
+            { materia: "Electricidad", termino: "Cortocircuito", definicion: "Falla por unión de fases sin resistencia, generando corriente infinita instantánea." },
+            { materia: "Electricidad", termino: "Sobrecarga", definicion: "Conectar más carga (aparatos) de la que el cableado soporta, provocando calentamiento lento." },
+            { materia: "Electricidad", termino: "Potencia Activa", definicion: "Energía que realmente produce trabajo útil (luz, movimiento). Se mide en Watts (W)." },
+            { materia: "Electricidad", termino: "Potencia Reactiva", definicion: "Energía magnética que fluye sin hacer trabajo mecánico (se usa para magnetizar motores). Se mide en VAR." },
+            { materia: "Electricidad", termino: "Potencia Aparente", definicion: "La suma vectorial de la activa y reactiva. Es el total que CFE suministra. Se mide en Volt-Amperes (VA)." },
+            { materia: "Electricidad", termino: "Factor de Potencia", definicion: "Indicador de eficiencia. FP ideal es cercano a 1. Si es bajo, hay multas por desaprovechar energía." },
+            { materia: "Electricidad", termino: "Calibre AWG", definicion: "Sistema de medidas para cables. Regla general: A mayor número AWG, el cable es más delgado." },
+            { materia: "Electricidad", termino: "Caída de Tensión", definicion: "Pérdida de voltaje a lo largo de un cable largo debido a la resistencia del propio material." },
+            { materia: "Electricidad", termino: "Interruptor Termomagnético", definicion: "Dispositivo (Pastilla o Breaker) que protege contra sobrecargas (térmico) y cortocircuitos (magnético)." },
+            { materia: "Electricidad", termino: "Fusible", definicion: "Dispositivo de protección con un hilo metálico que se funde (rompe el circuito) ante sobrecorrientes." },
+            { materia: "Electricidad", termino: "Amperímetro de Gancho", definicion: "Herramienta que mide corriente abrazando el cable, leyendo su campo magnético sin pelarlo." },
+            { materia: "Electricidad", termino: "Megger (Megóhmetro)", definicion: "Aparato que aplica altos voltajes para probar si el aislamiento (forro) de los cables está dañado." },
+            { materia: "Electricidad", termino: "Circuito en Serie", definicion: "Los componentes van uno tras otro. Si uno falla, se apaga todo. La corriente es la misma en todos lados." },
+            { materia: "Electricidad", termino: "Circuito en Paralelo", definicion: "Cada componente tiene su propia línea al voltaje. Si uno falla, los demás siguen. El voltaje es igual para todos." },
+            { materia: "Electricidad", termino: "Conductor", definicion: "Material (como el Cobre o Aluminio) con electrones libres, que facilita el flujo eléctrico." },
+            { materia: "Electricidad", termino: "Aislante", definicion: "Material (Plástico, Goma, Vidrio) que no tiene electrones libres y bloquea el paso de electricidad." },
+            { materia: "Electricidad", termino: "Semiconductor", definicion: "Material (Silicio) que puede comportarse como conductor o aislante según la condición." },
+            { materia: "Electricidad", termino: "Inducción Magnética", definicion: "Proceso donde un campo magnético variable genera (induce) voltaje en un cable cercano." },
+            { materia: "Electricidad", termino: "Generador Eléctrico", definicion: "Máquina rotativa que convierte energía mecánica en energía eléctrica (CA o CD)." },
+            { materia: "Electricidad", termino: "Alternador", definicion: "Generador específico de Corriente Alterna (CA), usado en plantas de energía y vehículos." },
+            { materia: "Electricidad", termino: "Conexión Estrella (Y)", definicion: "Conexión de motores/transformadores trifásicos que tiene un punto neutro al centro." },
+            { materia: "Electricidad", termino: "Conexión Delta (Triángulo)", definicion: "Conexión trifásica donde las bobinas cierran en triángulo, sin contar con punto neutro." },
+            { materia: "Electricidad", termino: "Efecto Pelicular", definicion: "En CA de alta frecuencia, la corriente viaja solo por el exterior del cable, desperdiciando el centro." },
+            { materia: "Electricidad", termino: "Relevador (Relay)", definicion: "Interruptor electromecánico. Una pequeña corriente en su bobina enciende un gran circuito de potencia." },
+            { materia: "Electricidad", termino: "Motor Monofásico", definicion: "Motor que opera con 1 fase y neutro. Requiere un capacitor de arranque para empezar a girar." },
+            { materia: "Electricidad", termino: "Transformador Elevador", definicion: "Su secundario tiene más vueltas que su primario, por lo que saca más voltaje del que entra." },
+            { materia: "Electricidad", termino: "Fuerza Electromotriz (FEM)", definicion: "Es otra forma de llamar al voltaje generado en una batería o inducido en un motor." },
+            { materia: "Electricidad", termino: "Banco de Capacitores", definicion: "Equipos que se instalan en las industrias para corregir (mejorar) su Factor de Potencia." },
+            { materia: "Electricidad", termino: "Frecuencia de Red", definicion: "En México y USA es de 60Hz. En Europa y Sudamérica comúnmente es de 50Hz." },
+
+            // ================== CÓMPUTO (40 Conceptos) ==================
+            { materia: "Cómputo", termino: "Hardware", definicion: "Partes físicas y tangibles de una computadora (monitor, CPU, teclado)." },
+            { materia: "Cómputo", termino: "Software", definicion: "Programas y sistemas operativos lógicos que le dicen al hardware qué hacer." },
+            { materia: "Cómputo", termino: "Memoria RAM", definicion: "Memoria de trabajo rápida y volátil. Pierde su información al apagar el equipo." },
+            { materia: "Cómputo", termino: "Memoria ROM", definicion: "Memoria de solo lectura. Guarda datos de fábrica para que la PC arranque." },
+            { materia: "Cómputo", termino: "Disco Duro (HDD)", definicion: "Almacenamiento masivo permanente magnético (lento pero de gran capacidad)." },
+            { materia: "Cómputo", termino: "Unidad Estado Sólido (SSD)", definicion: "Almacenamiento permanente basado en chips (NAND Flash). Extremadamente rápido frente al HDD." },
+            { materia: "Cómputo", termino: "Procesador (CPU)", definicion: "El cerebro del equipo. Realiza los cálculos y ejecuta las instrucciones del sistema." },
+            { materia: "Cómputo", termino: "Tarjeta Madre (Motherboard)", definicion: "Placa de circuito principal donde se conectan e interconectan todos los componentes del sistema." },
+            { materia: "Cómputo", termino: "Sistema Operativo (OS)", definicion: "Software base (Windows, macOS, Linux) que gestiona los recursos físicos del equipo." },
+            { materia: "Cómputo", termino: "Dirección IP", definicion: "Número de identificación de un dispositivo conectado a una red (ej. 192.168.1.254)." },
+            { materia: "Cómputo", termino: "Dirección MAC", definicion: "Identificador físico único de fábrica grabado en la tarjeta de red del equipo." },
+            { materia: "Cómputo", termino: "DNS", definicion: "Domain Name System. Traduce nombres web legibles (google.com) a direcciones IP numéricas." },
+            { materia: "Cómputo", termino: "Red LAN", definicion: "Red de Área Local. Abarca áreas pequeñas como casas, cibercafés o una oficina." },
+            { materia: "Cómputo", termino: "Red WAN", definicion: "Red de Área Amplia. Abarca ciudades o países. El internet es una red WAN." },
+            { materia: "Cómputo", termino: "Router (Enrutador)", definicion: "Interconecta redes distintas. Envía la información de tu casa hacia el Internet." },
+            { materia: "Cómputo", termino: "Switch", definicion: "Aparato para redes LAN que conecta varias PC. Es 'inteligente', envía datos solo a la PC destino." },
+            { materia: "Cómputo", termino: "Protocolo HTTP / HTTPS", definicion: "Reglas para navegar webs. La versión 'S' usa encriptación de seguridad para tarjetas o contraseñas." },
+            { materia: "Cómputo", termino: "Protocolo FTP", definicion: "File Transfer Protocol. Protocolo especializado en descargar y subir archivos pesados." },
+            { materia: "Cómputo", termino: "Sistema Binario", definicion: "Lenguaje base de la computadora basado exclusivamente en ceros (0) y unos (1)." },
+            { materia: "Cómputo", termino: "Bit y Byte", definicion: "El Bit es la unidad mínima (1 o 0). El Byte es una agrupación de 8 bits (equivale a un carácter de texto)." },
+            { materia: "Cómputo", termino: "Sistema Hexadecimal", definicion: "Sistema de base 16 (0-9 y A-F) muy usado en programación y redes (para MACs o colores web)." },
+            { materia: "Cómputo", termino: "Código ASCII", definicion: "Tabla de equivalencia donde cada letra del teclado está representada por un número binario." },
+            { materia: "Cómputo", termino: "Ping", definicion: "Comando de red para probar si hay conexión con otro equipo, enviando paquetes y esperando el eco." },
+            { materia: "Cómputo", termino: "Firewall", definicion: "Cortafuegos. Software o hardware que bloquea ataques y tráfico de red no autorizado." },
+            { materia: "Cómputo", termino: "VPN (Red Privada Virtual)", definicion: "Túnel cifrado que oculta tu IP y protege tu tráfico en internet, simulando estar en otro país o empresa." },
+            { materia: "Cómputo", termino: "Topología Estrella", definicion: "Diseño de red donde todas las computadoras se conectan a un Switch central. Es la más usada hoy en día." },
+            { materia: "Cómputo", termino: "Cable UTP", definicion: "Cable de par trenzado no blindado. El típico cable de red o ethernet (Categoría 5 o 6)." },
+            { materia: "Cómputo", termino: "Conector RJ45", definicion: "Conector de plástico de 8 pines utilizado en las puntas de los cables de red UTP." },
+            { materia: "Cómputo", termino: "Fibra Óptica", definicion: "Medio de transmisión de red que envía pulsos de luz. No sufre interferencia electromagnética y es ultra rápido." },
+            { materia: "Cómputo", termino: "Malware", definicion: "Software malicioso creado para dañar sistemas (virus, troyanos, gusanos)." },
+            { materia: "Cómputo", termino: "Phishing", definicion: "Ataque cibernético mediante engaños (correos falsos) para que el usuario revele sus claves bancarias." },
+            { materia: "Cómputo", termino: "Ransomware", definicion: "Virus que secuestra los archivos de la PC (los encripta) y pide un rescate económico para liberarlos." },
+            { materia: "Cómputo", termino: "BIOS / UEFI", definicion: "Sistema básico incrustado en la placa madre que chequea el hardware al encender y arranca Windows." },
+            { materia: "Cómputo", termino: "Caché", definicion: "Memoria ultra-rápida pequeña ubicada junto al procesador que guarda los datos más usados para ahorrar tiempo." },
+            { materia: "Cómputo", termino: "Nube (Cloud)", definicion: "Servicios informáticos y de almacenamiento alojados en servidores externos, accesibles vía internet." },
+            { materia: "Cómputo", termino: "Servidor", definicion: "Computadora potente dedicada 24/7 a procesar solicitudes, alojar webs o manejar bases de datos." },
+            { materia: "Cómputo", termino: "Backup", definicion: "Copia de seguridad de datos importantes para prevenir pérdida de información por fallos." },
+            { materia: "Cómputo", termino: "Fuente de Poder (ATX)", definicion: "Hardware que convierte los 120V de CA de la pared en 12V, 5V y 3.3V de CD para la computadora." },
+            { materia: "Cómputo", termino: "Formato NTFS", definicion: "Sistema de archivos estándar de Windows. Permite archivos mayores a 4GB y otorga mayor seguridad." },
+            { materia: "Cómputo", termino: "Máscara de Subred", definicion: "Acompaña a la IP. Separa y determina qué parte de la IP identifica la red y qué parte a la PC." },
+
+            // ================== ÁLGEBRA (40 Conceptos) ==================
+            { materia: "Álgebra", termino: "Variable (Incógnita)", definicion: "Letra (como X o Y) que representa un valor desconocido en una expresión matemática." },
+            { materia: "Álgebra", termino: "Coeficiente", definicion: "Número grande que multiplica a la variable (Ej. en '5x', el 5 es el coeficiente)." },
+            { materia: "Álgebra", termino: "Términos Semejantes", definicion: "Términos que tienen exactamente las mismas letras con los mismos exponentes (ej. 3x² y -8x²)." },
+            { materia: "Álgebra", termino: "Monomio", definicion: "Expresión algebraica que consta de un solo término (Ej. 4x²y)." },
+            { materia: "Álgebra", termino: "Polinomio", definicion: "Suma o resta de varios monomios (Ej. Binomios, Trinomios)." },
+            { materia: "Álgebra", termino: "Grado de un Polinomio", definicion: "Es el exponente más alto que aparece en la expresión (Ej. x³ + 2x tiene grado 3)." },
+            { materia: "Álgebra", termino: "Leyes de los Signos (Multiplicación)", definicion: "Positivo por positivo = Positivo. Negativo por Negativo = Positivo. Signos distintos dan Negativo." },
+            { materia: "Álgebra", termino: "Leyes Exponentes (Multiplicación)", definicion: "Si las bases son iguales, se escribe la misma base y los exponentes se SUMAN." },
+            { materia: "Álgebra", termino: "Leyes Exponentes (División)", definicion: "Si las bases son iguales, la base se mantiene y al exponente de arriba se le RESTA el de abajo." },
+            { materia: "Álgebra", termino: "Binomio al Cuadrado", definicion: "(a+b)². Resulta en un TCP: Cuadrado del 1ro + Doble del 1ro por el 2do + Cuadrado del 2do." },
+            { materia: "Álgebra", termino: "Binomios Conjugados", definicion: "(a+b)(a-b). Son idénticos pero con diferente signo central. Resultan en Diferencia de Cuadrados (a²-b²)." },
+            { materia: "Álgebra", termino: "Diferencia de Cuadrados", definicion: "Resta de dos términos que tienen raíz exacta. Se factoriza en dos binomios conjugados." },
+            { materia: "Álgebra", termino: "Trinomio Cuadrado Perfecto (TCP)", definicion: "Polinomio de 3 términos donde el central es el doble de las raíces de los extremos." },
+            { materia: "Álgebra", termino: "Trinomio forma x²+bx+c", definicion: "Se factoriza buscando dos números que multiplicados den el tercer término (c) y sumados den el segundo (b)." },
+            { materia: "Álgebra", termino: "Factor Común", definicion: "Extraer la letra con menor exponente o número divisor máximo que se repite en toda la expresión." },
+            { materia: "Álgebra", termino: "Ecuación Lineal", definicion: "Ecuación de primer grado. La 'X' no tiene exponente. Da como resultado una recta geométrica." },
+            { materia: "Álgebra", termino: "Ecuación Cuadrática", definicion: "La incógnita principal está elevada al cuadrado (x²). Geométricamente es una parábola y arroja 2 resultados." },
+            { materia: "Álgebra", termino: "Fórmula General (Chicharronera)", definicion: "Se usa para resolver ecuaciones cuadráticas: x = [-b ± √(b² - 4ac)] / 2a." },
+            { materia: "Álgebra", termino: "Sistema de Ecuaciones 2x2", definicion: "Dos ecuaciones con dos incógnitas. Métodos: Sustitución, Reducción, Igualación y Gráfico." },
+            { materia: "Álgebra", termino: "Método Reducción (Suma/Resta)", definicion: "Busca sumar ecuaciones verticalmente para eliminar (cancelar) una de las variables." },
+            { materia: "Álgebra", termino: "Método de Sustitución", definicion: "Se despeja una variable de la primera ecuación y se sustituye ese valor dentro de la segunda." },
+            { materia: "Álgebra", termino: "Método de Igualación", definicion: "Se despeja la misma variable en ambas ecuaciones y se igualan los resultados obtenidos." },
+            { materia: "Álgebra", termino: "Plano Cartesiano", definicion: "Sistema de coordenadas 2D formado por una línea horizontal (X) y una vertical (Y) cruzadas en el Origen (0,0)." },
+            { materia: "Álgebra", termino: "Eje Abscisas", definicion: "Es el eje horizontal del Plano Cartesiano (Eje X)." },
+            { materia: "Álgebra", termino: "Eje Ordenadas", definicion: "Es el eje vertical del Plano Cartesiano (Eje Y)." },
+            { materia: "Álgebra", termino: "Pendiente (m)", definicion: "Indica la inclinación de una recta. Si es positiva, sube a la derecha; si es negativa, baja." },
+            { materia: "Álgebra", termino: "Ordenada al Origen (b)", definicion: "Es el punto exacto donde la línea recta cruza el Eje Vertical (Y)." },
+            { materia: "Álgebra", termino: "Inecuación (Desigualdad)", definicion: "Operación que usa signos como Mayor que (>), Menor que (<). Su solución es un rango de números, no uno solo." },
+            { materia: "Álgebra", termino: "Valor Absoluto", definicion: "La distancia de un número al cero, sin importar su signo. Siempre es positivo. Denotado como |x|." },
+            { materia: "Álgebra", termino: "Racionalización", definicion: "Proceso algebraico para eliminar las raíces (ej. raíces cuadradas) del denominador de una fracción." },
+            { materia: "Álgebra", termino: "Fracción Algebraica", definicion: "División entre polinomios. Para simplificarla, SIEMPRE se debe factorizar primero el numerador y el denominador." },
+            { materia: "Álgebra", termino: "Dominio de una Función", definicion: "Es el conjunto de todos los valores posibles que puede tomar la variable independiente (la X)." },
+            { materia: "Álgebra", termino: "Rango de una Función", definicion: "Es el conjunto de todos los resultados posibles que arroja la variable dependiente (la Y)." },
+            { materia: "Álgebra", termino: "Logaritmo", definicion: "Operación matemática inversa de la exponenciación. Pregunta: ¿A qué potencia elevo la base para obtener este número?" },
+            { materia: "Álgebra", termino: "Identidad", definicion: "Ecuación que es siempre verdadera sin importar el valor que se le asigne a la variable." },
+            { materia: "Álgebra", termino: "Proporción", definicion: "Igualdad entre dos razones o fracciones matemáticas (Regla de 3)." },
+            { materia: "Álgebra", termino: "Intervalo", definicion: "Conjunto de números reales comprendidos entre dos extremos. Se usa en inecuaciones." },
+            { materia: "Álgebra", termino: "Radical", definicion: "Expresión matemática que indica una raíz (cuadrada, cúbica). El número adentro se llama radicando." },
+            { materia: "Álgebra", termino: "Ecuación Cúbica", definicion: "Ecuación polinómica de tercer grado. Posee hasta 3 raíces o soluciones diferentes." },
+            { materia: "Álgebra", termino: "Discriminante (Fórmula General)", definicion: "Lo que está dentro de la raíz cuadrada (b² - 4ac). Si es negativo, la ecuación no tiene solución real." }
+        ];
+      
 
         // Lógica del sistema
         let modoActual = ''; 
@@ -3298,6 +3562,89 @@
                 volverAlMenu();
             } else if (isQuizVisible || isStudyVisible || isResultVisible) {
                 volverABloques();
+            }
+        }
+      
+        // ==========================================
+        // LÓGICA DEL ASISTENTE VIRTUAL (AVATAR)
+        // ==========================================
+        function abrirAsistente() {
+            document.getElementById('assistant-modal').style.display = 'flex';
+            document.getElementById('assistant-search').focus();
+        }
+
+        function cerrarAsistente() {
+            // Oculta la ventana del asistente
+            document.getElementById('assistant-modal').style.display = 'none';
+            
+            // LIMPIEZA AUTOMÁTICA: Borra el texto escrito y las tarjetas de resultados
+            document.getElementById('assistant-search').value = '';
+            document.getElementById('assistant-results').innerHTML = '';
+        }
+
+        function ejecutarBusquedaAsistente() {
+            const query = document.getElementById('assistant-search').value.toLowerCase().trim();
+            const resultadosContenedor = document.getElementById('assistant-results');
+            resultadosContenedor.innerHTML = ''; 
+
+            if (query.length === 0) return;
+
+            if (query.length < 3) {
+                resultadosContenedor.innerHTML = '<p style="color: #999; text-align: center;">Sigue escribiendo... (mínimo 3 letras)</p>';
+                return;
+            }
+
+            let resultadosEncontrados = 0;
+            const palabrasClave = query.split(' '); 
+
+            // 1. PRIMERO: Buscar en la Base de Conocimiento (La Guía)
+            baseConocimiento.forEach(item => {
+                const textoCompleto = (item.termino + " " + item.definicion).toLowerCase();
+                const coincide = palabrasClave.every(palabra => textoCompleto.includes(palabra));
+
+                if (coincide && resultadosEncontrados < 15) {
+                    resultadosEncontrados++;
+                    const tarjeta = document.createElement('div');
+                    tarjeta.className = 'study-card';
+                    // Le damos un borde y color diferente para que sepas que esto viene de la GUÍA y no del simulador
+                    tarjeta.style.borderLeft = "4px solid #9c27b0"; 
+                    tarjeta.innerHTML = `
+                        <span style="font-size: 0.8rem; background: #f3e5f5; color: #7b1fa2; padding: 3px 8px; border-radius: 10px;">📖 Guía: ${item.materia}</span>
+                        <div class="study-question" style="margin-top: 8px;">${item.termino}</div>
+                        <div class="study-explanation" style="margin-top: 5px; color: #333;">${item.definicion}</div>
+                    `;
+                    resultadosContenedor.appendChild(tarjeta);
+                }
+            });
+
+            // 2. SEGUNDO: Buscar en las 400 Preguntas (Base de Datos)
+            for (const materiaKey in baseDeDatos) {
+                const materiaNombre = baseDeDatos[materiaKey].nombre;
+                
+                baseDeDatos[materiaKey].preguntas.forEach(preguntaObj => {
+                    const textoCompleto = (preguntaObj.pregunta + " " + preguntaObj.explicacion).toLowerCase();
+                    const coincide = palabrasClave.every(palabra => textoCompleto.includes(palabra));
+                    
+                    if (coincide && resultadosEncontrados < 15) { 
+                        resultadosEncontrados++;
+                        const respuestaCorrectaTexto = preguntaObj.opciones[preguntaObj.respuestaCorrecta];
+                        
+                        const tarjeta = document.createElement('div');
+                        tarjeta.className = 'study-card';
+                        tarjeta.innerHTML = `
+                            <span style="font-size: 0.8rem; background: #e3f2fd; color: #005A9C; padding: 3px 8px; border-radius: 10px;">📝 Pregunta: ${materiaNombre}</span>
+                            <div class="study-question" style="margin-top: 8px;">${preguntaObj.pregunta}</div>
+                            <div class="study-answer">✔️ ${respuestaCorrectaTexto}</div>
+                            <div class="study-explanation">ℹ️ ${preguntaObj.explicacion}</div>
+                        `;
+                        resultadosContenedor.appendChild(tarjeta);
+                    }
+                });
+            }
+
+            // Si no encontró nada en ningún lado
+            if (resultadosEncontrados === 0) {
+                resultadosContenedor.innerHTML = `<p style="text-align: center; color: #666;">No encontré resultados exactos para "<strong>${query}</strong>". Intenta usar otras palabras.</p>`;
             }
         }
       
