@@ -2963,7 +2963,7 @@
             { materia: "Álgebra", termino: "Factor Común", definicion: "Extraer la letra con menor exponente o número divisor máximo que se repite en toda la expresión." },
             { materia: "Álgebra", termino: "Ecuación Lineal", definicion: "Ecuación de primer grado. La 'X' no tiene exponente. Da como resultado una recta geométrica." },
             { materia: "Álgebra", termino: "Ecuación Cuadrática", definicion: "La incógnita principal está elevada al cuadrado (x²). Geométricamente es una parábola y arroja 2 resultados." },
-            { materia: "Álgebra", termino: "Fórmula General (Chicharronera)", definicion: "Se usa para resolver ecuaciones cuadráticas: x = [-b ± √(b² - 4ac)] / 2a." },
+            { materia: "Álgebra", termino: "Fórmula General", definicion: "Se usa para resolver ecuaciones cuadráticas: x = [-b ± √(b² - 4ac)] / 2a." },
             { materia: "Álgebra", termino: "Sistema de Ecuaciones 2x2", definicion: "Dos ecuaciones con dos incógnitas. Métodos: Sustitución, Reducción, Igualación y Gráfico." },
             { materia: "Álgebra", termino: "Método Reducción (Suma/Resta)", definicion: "Busca sumar ecuaciones verticalmente para eliminar (cancelar) una de las variables." },
             { materia: "Álgebra", termino: "Método de Sustitución", definicion: "Se despeja una variable de la primera ecuación y se sustituye ese valor dentro de la segunda." },
@@ -3635,6 +3635,11 @@
         // ==========================================
         // LÓGICA DEL ASISTENTE VIRTUAL (AVATAR)
         // ==========================================
+        // Función para limpiar acentos y diéresis de cualquier texto
+        function quitarAcentos(texto) {
+            return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        }
+      
         function abrirAsistente() {
             document.getElementById('assistant-modal').style.display = 'flex';
             document.getElementById('assistant-search').focus();
@@ -3650,30 +3655,35 @@
         }
 
         function ejecutarBusquedaAsistente() {
-            const query = document.getElementById('assistant-search').value.toLowerCase().trim();
+            // Obtenemos lo que escribiste, en minúsculas
+            const rawQuery = document.getElementById('assistant-search').value.toLowerCase().trim();
             const resultadosContenedor = document.getElementById('assistant-results');
             resultadosContenedor.innerHTML = ''; 
 
-            if (query.length === 0) return;
+            if (rawQuery.length === 0) return;
 
-            if (query.length < 3) {
+            if (rawQuery.length < 3) {
                 resultadosContenedor.innerHTML = '<p style="color: #999; text-align: center;">Sigue escribiendo... (mínimo 3 letras)</p>';
                 return;
             }
 
+            // APLICAMOS LA MAGIA: Le quitamos los acentos a tu búsqueda
+            const queryLimpio = quitarAcentos(rawQuery);
             let resultadosEncontrados = 0;
-            const palabrasClave = query.split(' '); 
+            const palabrasClave = queryLimpio.split(' '); 
 
-            // 1. PRIMERO: Buscar en la Base de Conocimiento (La Guía)
+            // 1. Buscar en la Base de Conocimiento (La Guía)
             baseConocimiento.forEach(item => {
-                const textoCompleto = (item.termino + " " + item.definicion).toLowerCase();
+                // Juntamos el texto de la BD, lo hacemos minúsculas y también le quitamos los acentos
+                let textoCompleto = (item.termino + " " + item.definicion).toLowerCase();
+                textoCompleto = quitarAcentos(textoCompleto);
+
                 const coincide = palabrasClave.every(palabra => textoCompleto.includes(palabra));
 
                 if (coincide && resultadosEncontrados < 15) {
                     resultadosEncontrados++;
                     const tarjeta = document.createElement('div');
                     tarjeta.className = 'study-card';
-                    // Le damos un borde y color diferente para que sepas que esto viene de la GUÍA y no del simulador
                     tarjeta.style.borderLeft = "4px solid #9c27b0"; 
                     tarjeta.innerHTML = `
                         <span style="font-size: 0.8rem; background: #f3e5f5; color: #7b1fa2; padding: 3px 8px; border-radius: 10px;">📖 Guía: ${item.materia}</span>
@@ -3684,12 +3694,15 @@
                 }
             });
 
-            // 2. SEGUNDO: Buscar en las 400 Preguntas (Base de Datos)
+            // 2. Buscar en las 400 Preguntas (Base de Datos)
             for (const materiaKey in baseDeDatos) {
                 const materiaNombre = baseDeDatos[materiaKey].nombre;
                 
                 baseDeDatos[materiaKey].preguntas.forEach(preguntaObj => {
-                    const textoCompleto = (preguntaObj.pregunta + " " + preguntaObj.explicacion).toLowerCase();
+                    // Limpiamos también las preguntas de la BD
+                    let textoCompleto = (preguntaObj.pregunta + " " + preguntaObj.explicacion).toLowerCase();
+                    textoCompleto = quitarAcentos(textoCompleto);
+
                     const coincide = palabrasClave.every(palabra => textoCompleto.includes(palabra));
                     
                     if (coincide && resultadosEncontrados < 15) { 
@@ -3709,9 +3722,9 @@
                 });
             }
 
-            // Si no encontró nada en ningún lado
+            // Si no encontró nada (Mostramos la palabra original con todo y acento si es que lo pusiste)
             if (resultadosEncontrados === 0) {
-                resultadosContenedor.innerHTML = `<p style="text-align: center; color: #666;">No encontré resultados exactos para "<strong>${query}</strong>". Intenta usar otras palabras.</p>`;
+                resultadosContenedor.innerHTML = `<p style="text-align: center; color: #666;">No encontré resultados exactos para "<strong>${rawQuery}</strong>". Intenta usar otras palabras.</p>`;
             }
         }
       
